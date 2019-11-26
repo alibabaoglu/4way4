@@ -60,9 +60,9 @@ public class GameBoard {
 		b -= '0' * 2;
 		int y = b;
 		int i = 0;
-		
+
 		char zeile = (char) (x + '0');
-		
+
 		while (this.board[i][0] != zeile)
 			i++;
 
@@ -74,23 +74,23 @@ public class GameBoard {
 	 * Erstellt ein Rahmengitter und gibt das Board aus
 	 */
 	public void printBoard() {
-		System.out.println();
+		Ausgabensammlung.ausgabeMitAbsatz();
 		String rahmen = " ";
 
 		for (int i = 0; i < this.breite - 1; i++) {
 			rahmen += "͞͞ ͞ ͞|͞ ͞͞͞ ͞ ͞ ";
 		}
 		for (int i = 0; i < this.board.length; i++) {
-			System.out.println(rahmen + "͞ |");
+			Ausgabensammlung.ausgabeMitAbsatz(rahmen + "͞ |");
 			for (int j = 0; j < this.board[i].length; j++) {
 				if (j == this.board[i].length - 1)
-					System.out.print(this.board[i][j] + " |");
+					Ausgabensammlung.ausgabe(this.board[i][j] + " |");
 				else
-					System.out.print(this.board[i][j] + "  |   ");
+					Ausgabensammlung.ausgabe(this.board[i][j] + "  |   ");
 			}
-			System.out.println();
+			Ausgabensammlung.ausgabeMitAbsatz();
 		}
-		System.out.println(rahmen);
+		Ausgabensammlung.ausgabeMitAbsatz(rahmen);
 	}
 
 	public static void main(String[] args) {
