@@ -37,7 +37,8 @@ public class Menu {
 
 			// Auswahl Höhe des Spielbretts
 			do {
-				Ausgabensammlung.ausgabeMitAbsatz("Geben Sie eine Spaltenlänge für das Spielbrett zwischen 7 und 10 ein.");
+				Ausgabensammlung
+						.ausgabeMitAbsatz("Geben Sie eine Spaltenlänge für das Spielbrett zwischen 7 und 10 ein.");
 				spaltenlaenge = in.nextInt();
 				if (spaltenlaenge < 7 || spaltenlaenge > 10) {
 					Ausgabensammlung.ausgabeMitAbsatz("Ungültige Eingabe!");
@@ -49,7 +50,8 @@ public class Menu {
 
 			// Auswahl Breite des Spielbretts
 			do {
-				Ausgabensammlung.ausgabeMitAbsatz("Geben Sie eine Zeilenlänge für das Spielbrett zwischen 7 und 10 ein.");
+				Ausgabensammlung
+						.ausgabeMitAbsatz("Geben Sie eine Zeilenlänge für das Spielbrett zwischen 7 und 10 ein.");
 				zeilenlaenge = in.nextInt();
 				if (zeilenlaenge < 7 || spaltenlaenge > 10) {
 					Ausgabensammlung.ausgabeMitAbsatz("Ungültige Eingabe!");
@@ -75,7 +77,8 @@ public class Menu {
 //			} else {
 ////			Auswahl Spieler 1/2?
 //			}
-			Ausgabensammlung.ausgabeMitAbsatz("Wenn Sie das Spiel beenden wollen drücken Sie die 0, um ein neues Spiel zu starten drücken Sie eine beliebige andere Zahl");
+			Ausgabensammlung.ausgabeMitAbsatz(
+					"Wenn Sie das Spiel beenden wollen drücken Sie die 0, um ein neues Spiel zu starten drücken Sie eine beliebige andere Zahl");
 			wiederholen = in.nextInt();
 		} while (wiederholen != SPIEL_BEENDEN);
 		in.close();
