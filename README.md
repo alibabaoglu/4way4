@@ -1,6 +1,6 @@
 # 4way4
 
-Wenn beim ausführen der Klasse GameBoard kein Board auf der Konsole erscheint, dann müsst ihr die Settings in eurer IDE ändern.
+Wenn beim ausführen der Klasse GameBoard kein Board auf der Konsole erscheint, dann müsst Ihr die Settings in eurer IDE ändern.
 
 Bei Eclipse geht das wie folgt:
 
