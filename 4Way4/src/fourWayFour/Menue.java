@@ -2,7 +2,7 @@ package fourWayFour;
 
 import java.util.*;
 
-public class Menu {
+public class Menue {
 
 	final static int SPIEL_BEENDEN = 0;
 	final static int COMPUTER = 1;
