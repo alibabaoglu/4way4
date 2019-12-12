@@ -3,7 +3,7 @@ package fourWayFour;
 /**
  * Spielbrett 4 Way 4
  */
-public class GameBoard implements Spielbrett {
+public class GameBoard {
 	private String[][] board; // charAt
 	private int hoehe, breite;
 
