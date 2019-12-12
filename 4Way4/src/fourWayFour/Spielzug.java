@@ -4,6 +4,7 @@ public class Spielzug {
 //	private String[][] board; // charAt
 	private int nummer;
 	private int hoehe;
+	private int breite;
 	private char buchstabe;
 	private char richtung;
 //	private String winner;
@@ -16,32 +17,42 @@ public class Spielzug {
 	 */
 	@SuppressWarnings("unused")
 	private boolean isValidMove(String zugeingabe) { // Speicherung nummer, buchstabe (undd richtung)
-		if (zugeingabe.length() > 3 || zugeingabe.length() < 2) {// Länge x, x<2 oder 3<x
+		if (zugeingabe.length() > 3 || zugeingabe.length() < 2) {// Laenge x, x<2 oder 3<x
 			if (zugeingabe.length() == 4) { // Ausnahme 10
 				if ((zugeingabe.charAt(0) == '1') && (zugeingabe.charAt(1) == '0')
-						&& ((zugeingabe.charAt(2) == 'a') || (zugeingabe.charAt(2) == (char) ('a' + this.hoehe - 3)))) {
+						&& ((zugeingabe.charAt(2) == 'a') || (zugeingabe.charAt(2) == (char) ('a' + this.breite - 3)))) {
+					
 					this.nummer = 10;
 					this.buchstabe = zugeingabe.charAt(2);
+				
 				} else if ((zugeingabe.charAt(1) == '1') && (zugeingabe.charAt(2) == '0')
-						&& ((zugeingabe.charAt(0) == 'a') || (zugeingabe.charAt(0) == (char) ('a' + this.hoehe - 3)))) {
+						&& ((zugeingabe.charAt(0) == 'a') || (zugeingabe.charAt(0) == (char) ('a' + this.breite - 3)))) {
+					
 					this.nummer = 10;
 					this.buchstabe = zugeingabe.charAt(0);
+				
 				} else {
 					return false;
 				}
 				if (zugeingabe.charAt(3) == 'd'
-						|| zugeingabe.charAt(3) == 'l' && this.buchstabe == (char) ('a' + this.hoehe - 3)
+						|| zugeingabe.charAt(3) == 'l' && this.buchstabe == (char) ('a' + this.breite - 3)
 						|| zugeingabe.charAt(3) == 'r' && this.buchstabe == 'a') {
+				
 					this.richtung = zugeingabe.charAt(3);
 					return true;
+				
 				} else {
 					return false;
 				}
 			} else {
 				return false;
 			}
-		} else {// Länge x, 2<=x<=3
-
+		} else {// Laenge x, 2<=x<=3
+			if(zugeingabe.length()==3) {
+				if((zugeingabe.charAt(0) == '1'||zugeingabe.charAt(0) == (char)('1'+this.hoehe-3))&&(zugeingabe.charAt(1) == 'a'||zugeingabe.charAt(1) == (char) ('a' + this.breite - 3))) {
+					
+				}
+			}
 		}
 		// Integer.parseInt("123");
 		return true;
