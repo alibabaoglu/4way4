@@ -1,5 +1,8 @@
 package fourWayFour;
 
+/**
+ * Anforderungen der "Staatssekretäre"
+ */
 public interface Requirements {
 
 	public void myMove(String input);
