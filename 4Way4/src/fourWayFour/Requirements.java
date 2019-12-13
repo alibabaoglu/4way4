@@ -1,6 +1,6 @@
 package fourWayFour;
 
-public interface Vorraussetzungen {
+public interface Requirements {
 
 	public void myMove(String eingabe);
 	public String yourMove();
