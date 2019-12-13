@@ -15,7 +15,8 @@ public class Spielzug {
 	 * Ueberprueft ob ein Zugeingabe-String x zulaessig ist und speichert die
 	 * Variablen (Nummer num, Buchstabe buch und Richtung rich)
 	 */
-	public boolean isValidMove(String zugeingabe) {
+	@SuppressWarnings("unused")
+	private boolean isValidString(String zugeingabe) {
 
 		// Laenge des Strings x, x<2 oder 3<x
 		if (zugeingabe.length() > 3 || zugeingabe.length() < 2) {
@@ -157,7 +158,7 @@ public class Spielzug {
 	}
 //---------------------------------------------------------------------------------------------------------
 //	// Pr�ft ob ein Zug g�ltig ist. Nicht g�ltig wenn Reihe/Spalte voll.
-//	private boolean isValid(int x, int y) {
+//	private boolean isValidSpace(int num, char buch) {
 //		direction(x, y);
 //
 //		if (up) {
@@ -184,25 +185,6 @@ public class Spielzug {
 //
 //		return false;
 //	}
-//---------------------------------------------------------------------------------------------------------
-//	public void setStein(int x, char b) {
-//	b -= '0' * 2;
-//	int y = b;
-//	int x = 0;
-//
-//	char zeile = (char) (x + '0');
-//
-//	while (this.board[x][0] != zeile)
-//		i++;
-//	if (this.board[x][y] == 0)
-//		board[x][y] = 'X';
-//
-//	if (isValid(x, y)) {
-//		verschiebeSteine(x, y);
-//
-//	} else
-//		throw new IllegalArgumentException("Zug nicht gültig");
-//}
 //---------------------------------------------------------------------------------------------------------
 //public boolean isRunning() {
 //if(end==true) {
@@ -252,67 +234,11 @@ public class Spielzug {
 //		}
 //	}
 //---------------------------------------------------------------------------------------------------------
-////	private void verschiebeSteine(int x, int y) {
-////		// TODO: Anpassen an das Board Algorithmus stimmt aber wurde erstellt nur für
-////		// eine zeile.
-////		if (up) {
-////			int i, j;
-////			for (int z = 1; z < board[0].length - 2; z++) {
-////				i = 1;
-////				while (i < board.length - 2 && board[i][z] == 0) {
-////					i++;
-////				}
-////				if (board[i][z] != 0) {
-////
-////					board[i][z] = 0;
-////					j = i;
-////					while (board[j][z] == 0 && j > 0)
-////						if (board[j - 1][z] == 0)
-////							j--;
-////						else
-////							break;
-////					board[j][z] = 'X';
-////
-////				}
-////
-////			}
-////		}
-////
-////	}
-//---------------------------------------------------------------------------------------------------------
-//	// Bestimmt in welche Richtung sich die Steine verschieben.
-//
-////	private void direction(int x, int y) {
-////		int maxCol = board[0].length - 2;
-////		int maxRow = board.length - 2;
-////
-////		up = false;
-////		down = false;
-////		left = false;
-////		right = false;
-////
-////		if (x != 1 && x != maxRow) {
-////			if (y == 1) {
-////				right = true;
-////			} else if (y == maxCol) {
-////				left = true;
-////			}
-////		}
-////		if (y != 1 && y != maxCol) {
-////			if (x == maxRow) {
-////				up = true;
-////			} else if (x == 1) {
-////				down = true;
-////			}
-////		}
-////
-////	}
-//---------------------------------------------------------------------------------------------------------
 //verschiebe alle Steine in die angegebene Richtung bekommt als param die
 //Koordinaten
 //
 //	private void verschiebeSteine(int x, int y) {
-////TODO: Anpassen an das Board Algorithmus stimmt aber wurde erstellt nur f�r eine zeile.
+//		//TODO: Anpassen an das Board Algorithmus stimmt aber wurde erstellt nur f�r eine zeile.
 //		if (up) {
 //			int i, j;
 //			for (int z = 1; z < board[0].length - 2; z++) {
@@ -330,62 +256,30 @@ public class Spielzug {
 //						else
 //							break;
 //					board[j][z] = 'X';
-//
 //				}
-//
 //			}
-//			}	
+//		}	
 //	}
 //---------------------------------------------------------------------------------------------------------
-//	//Bestimmt in welche Richtung sich die Steine verschieben.
-//
-//	private void direction(int x, int y) {
-//		int maxCol = board[0].length - 2;
-//		int maxRow = board.length - 2;
-//
-//		up = false;
-//		down = false;
-//		left = false;
-//		right = false;
-//
-//		if (x != 1 && x != maxRow) {
-//			if (y == 1) {
-//				right = true;
-//			} else if (y == maxCol) {
-//				left = true;
-//			}
-//		}
-//		if (y != 1 && y != maxCol) {
-//			if (x == maxRow) {
-//				up = true;
-//			} else if (x == 1) {
-//				down = true;
-//			}
-//		}
-//
-//	}
-//---------------------------------------------------------------------------------------------------------
-//	//setzt ein Stein
-//
+//	//setzt einen Stein
 //	public void setStein(int x, char b) {
-//		b -= '0' * 2;
-//		int y = b;
-//		int i = 0;
+//	b -= '0' * 2;
+//	int y = b;
+//	int x = 0;
 //
-//		char zeile = (char) (x + '0');
+//	char zeile = (char) (x + '0');
 //
-//		while (this.board[i][0] != zeile)
-//			i++;
-//		if (this.board[i][y] == 0)
-//			board[i][y] = 'X';
-//		
-//		if (isValid(i, y)) {
-//		verschiebeSteine(i, y);
+//	while (this.board[x][0] != zeile)
+//		i++;
+//	if (this.board[x][y] == 0)
+//		board[x][y] = 'X';
 //
-//		} else
-//			throw new IllegalArgumentException("Zug nicht g�ltig");
+//	if (isValid(x, y)) {
+//		verschiebeSteine(x, y);
 //
-//	}
+//	} else
+//		throw new IllegalArgumentException("Zug nicht gültig");
+//}
 //---------------------------------------------------------------------------------------------------------
 //* Verschiebung: Erste Freie Stelle Merken, wenn keine da zur nächsten
 //* Zeile/Spalte Erstes Zeichen suchen, wenn keins nach erster freien Stelle, zur
