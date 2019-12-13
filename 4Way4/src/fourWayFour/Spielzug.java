@@ -2,9 +2,9 @@ package fourWayFour;
 
 public class Spielzug {
 //	private String[][] board; // charAt
-	private int nummer;
-	private int hoehe;
 	private int breite;
+	private int hoehe;
+	private int nummer;
 	private char buchstabe;
 	private char richtung;
 //	private String winner;
@@ -12,50 +12,148 @@ public class Spielzug {
 //	
 
 	/*
-	 * String länge und int bestimmen->char und int auf richtigkeit überprüfen,
-	 * richtung auf richtigkeit überprüfen
+	 * Ueberprueft ob ein Zugeingabe-String x zulaessig ist und speichert die
+	 * Variablen (Nummer num, Buchstabe buch und Richtung rich)
 	 */
-	@SuppressWarnings("unused")
-	private boolean isValidMove(String zugeingabe) { // Speicherung nummer, buchstabe (undd richtung)
-		if (zugeingabe.length() > 3 || zugeingabe.length() < 2) {// Laenge x, x<2 oder 3<x
-			if (zugeingabe.length() == 4) { // Ausnahme 10
-				if ((zugeingabe.charAt(0) == '1') && (zugeingabe.charAt(1) == '0')
-						&& ((zugeingabe.charAt(2) == 'a') || (zugeingabe.charAt(2) == (char) ('a' + this.breite - 3)))) {
-					
+	public boolean isValidMove(String zugeingabe) {
+
+		// Laenge des Strings x, x<2 oder 3<x
+		if (zugeingabe.length() > 3 || zugeingabe.length() < 2) {
+
+			// Laenge des Strings x=4
+			if (zugeingabe.length() == 4) {
+
+				// x="10a"rich oder x="10"buch(letzter Buchstabe)rich
+				if ((zugeingabe.charAt(0) == '1') && (zugeingabe.charAt(1) == '0') && ((zugeingabe.charAt(2) == 'a')
+						|| (zugeingabe.charAt(2) == (char) ('a' + this.breite - 3)))) {
 					this.nummer = 10;
 					this.buchstabe = zugeingabe.charAt(2);
-				
-				} else if ((zugeingabe.charAt(1) == '1') && (zugeingabe.charAt(2) == '0')
-						&& ((zugeingabe.charAt(0) == 'a') || (zugeingabe.charAt(0) == (char) ('a' + this.breite - 3)))) {
-					
+				}
+				// x="a10"rich oder x=buch(letzter Buchstabe)"10"rich
+				else if ((zugeingabe.charAt(1) == '1') && (zugeingabe.charAt(2) == '0')
+						&& ((zugeingabe.charAt(0) == 'a')
+								|| (zugeingabe.charAt(0) == (char) ('a' + this.breite - 3)))) {
 					this.nummer = 10;
 					this.buchstabe = zugeingabe.charAt(0);
-				
-				} else {
+				}
+				// x=4 aber num und/oder buch ungueltig
+				else {
 					return false;
 				}
+				// rich=d oder x="10ar", "a10r" oder x="10"buch(letzter Buchstabe)"l" ,
+				// buch(letzter Buchstabe)"10l"
 				if (zugeingabe.charAt(3) == 'd'
 						|| zugeingabe.charAt(3) == 'l' && this.buchstabe == (char) ('a' + this.breite - 3)
 						|| zugeingabe.charAt(3) == 'r' && this.buchstabe == 'a') {
-				
 					this.richtung = zugeingabe.charAt(3);
 					return true;
-				
-				} else {
+				}
+				// Laenge x=4 aber rich ungueltig
+				else {
 					return false;
 				}
-			} else {
+			}
+			// Laenge x, 2<=x<=3
+			else {
 				return false;
 			}
-		} else {// Laenge x, 2<=x<=3
-			if(zugeingabe.length()==3) {
-				if((zugeingabe.charAt(0) == '1'||zugeingabe.charAt(0) == (char)('1'+this.hoehe-3))&&(zugeingabe.charAt(1) == 'a'||zugeingabe.charAt(1) == (char) ('a' + this.breite - 3))) {
-					
+			// Laenge x, 2<=x<=3
+		} else {
+
+			// x=3
+			if (zugeingabe.length() == 3) {
+
+				// x = "1"buch rich oder num(letzte Nummer) buch rich
+				if (zugeingabe.charAt(0) == '1' || zugeingabe.charAt(0) == (char) ('1' + this.hoehe - 3)) {
+					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(0)));
+					this.buchstabe = zugeingabe.charAt(1);
+				}
+				// x = buch"1"rich oder buch num(letzte Nummer) rich
+				else if (zugeingabe.charAt(1) == '1' || zugeingabe.charAt(1) == (char) ('1' + this.hoehe - 3)) {
+					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(1)));
+					this.buchstabe = zugeingabe.charAt(0);
+				}
+				// Laenge x = 3, num ungueltig
+				else {
+					return false;
+				}
+				// Laenge x = 3, num gueltig
+				this.richtung = zugeingabe.charAt(2);
+
+				// x = String mit "a" und "1" und entweder "r" oder "u"
+				if ((this.richtung == 'r' || this.richtung == 'u') && this.nummer == 1 && this.buchstabe == 'a') {
+					return true;
+				}
+				// x = String mit dem letzter Buchstaben und "1" und entweder "u" oder "l"
+				else if ((this.richtung == 'u' || this.richtung == 'l') && this.nummer == 1
+						&& this.buchstabe == (char) ('a' + this.breite - 3)) {
+					return true;
+				}
+				// x = String mit dem letzter Buchstaben und der letzten Zahl und entweder "l"
+				// oder "d"
+				else if ((this.richtung == 'l' || this.richtung == 'd') && this.nummer == (1 + this.hoehe - 3)
+						&& this.buchstabe == (char) ('a' + this.breite - 3)) {
+					return true;
+				}
+				// x = String mit "a" und der letzten Zahl und entweder "d" oder "r"
+				else if ((this.richtung == 'd' || this.richtung == 'r') && this.nummer == (1 + this.hoehe - 3)
+						&& this.buchstabe == 'a') {
+					return true;
+				}
+				// Laenge x = 3 aber rich und/oder buch ungueltig
+				else {
+					return false;
+				}
+			}
+			// x=2
+			else {
+
+				// x = num buch
+				if ((zugeingabe.charAt(0) >= '1' && zugeingabe.charAt(0) <= (char) ('1' + this.hoehe - 3))
+						&& (zugeingabe.charAt(1) >= 'a' && zugeingabe.charAt(1) <= (char) ('a' + this.breite - 3))) {
+
+					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(0)));
+					this.buchstabe = zugeingabe.charAt(1);
+				}
+				// x = buch num
+				else if ((zugeingabe.charAt(1) >= '1' && zugeingabe.charAt(1) <= (char) ('1' + this.hoehe - 3))
+						&& (zugeingabe.charAt(0) >= 'a' && zugeingabe.charAt(0) <= (char) ('a' + this.breite - 3))) {
+
+					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(1)));
+					this.buchstabe = zugeingabe.charAt(0);
+				}
+				// x = 2, num und/oder buch ungueltig
+				else {
+					return false;
+				}
+				// x = String mit "1" und NICHT "a" oder dem letzten Buchstaben
+				if (this.nummer == 1 && this.buchstabe != 'a' && this.buchstabe != ('a' + this.breite - 3)) {
+					this.richtung = 'u';
+					return true;
+				}
+				// x = String mit der letzten Zahl und NICHT "a" oder dem letzten Buchstaben
+				else if (this.nummer == (1 + this.hoehe - 3) && this.buchstabe != 'a'
+						&& this.buchstabe != ('a' + this.breite - 3)) {
+					this.richtung = 'd';
+					return true;
+				}
+				// x = String mit "a" und NICHT "1" oder der letzten Zahl
+				else if (this.buchstabe == 'a' && this.nummer != 1 && this.nummer != (1 + this.hoehe - 3)) {
+					this.richtung = 'r';
+					return true;
+				}
+				// x = String mit dem letzten Buchstaben und NICHT "1" oder der letzten Zahl
+				else if (this.buchstabe == ('a' + this.breite - 3) && this.nummer != 1
+						&& this.nummer != (1 + this.hoehe - 3)) {
+					this.richtung = 'l';
+					return true;
+				}
+				// x = 2, num zusammen mit buch ungueltig
+				else {
+					return false;
 				}
 			}
 		}
-		// Integer.parseInt("123");
-		return true;
 	}
 //---------------------------------------------------------------------------------------------------------
 //	// Pr�ft ob ein Zug g�ltig ist. Nicht g�ltig wenn Reihe/Spalte voll.
