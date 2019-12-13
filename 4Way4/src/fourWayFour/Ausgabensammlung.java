@@ -1,16 +1,16 @@
 package fourWayFour;
 
-public class Ausgabensammlung {
+public class OutputCollection {
 
-	protected static void ausgabeMitAbsatz(String s) {
+	protected static void outputWithNewLine(String s) {
 		System.out.println(s);
 	}
 
-	protected static void ausgabeMitAbsatz() {
+	protected static void outputWithNewLine() {
 		System.out.println();
 	}
 
-	protected static void ausgabe(String s) {
+	protected static void output(String s) {
 		System.out.print(s);
 	}
 }
