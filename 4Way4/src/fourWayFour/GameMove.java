@@ -43,7 +43,7 @@ public class GameMove {
 			this.shiftGameBoard(symbol, num, buch, besetzt);
 			this.gb.printBoard();
 		} else {
-			throw new GameException("Ungültiger Zug");
+			throw new GameException("Ungültiger Zug: "+eingabe);
 		}
 	}
 
