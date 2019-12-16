@@ -5,8 +5,7 @@ package fourWayFour;
  */
 public class GameMove {
 	private int nummer;
-	private char buchstabe;
-	private char richtung;
+	private char buchstabe, richtung;
 	private GameBoard gb;
 
 	/**
@@ -43,7 +42,7 @@ public class GameMove {
 			this.shiftGameBoard(symbol, num, buch, besetzt);
 			this.gb.printBoard();
 		} else {
-			throw new GameException("Ungültiger Zug: "+eingabe);
+			throw new GameException("Ungültiger Zug: " + eingabe);
 		}
 	}
 
@@ -57,178 +56,128 @@ public class GameMove {
 	 * @param y-Wert
 	 * @param besetzt
 	 */
-	private void shiftGameBoard(String symbol, int x, int y, boolean besetzt) {
-		String stein;
+	
+	public boolean notShiftable(int i, int z) {
+		if (richtung == 'u') {
+			return (i < this.gb.board.length - 2
+					&& (this.gb.board[i][z] == " " || this.gb.board[i][z] != " " && this.gb.board[(i - 1)][z] != " "));
+		} else if (richtung == 'd') {
+			return (i > 1
+					&& (this.gb.board[i][z] == " " || this.gb.board[i][z] != " " && this.gb.board[i + 1][z] != " "));
+		} else if (richtung == 'r') {
+			return (i > 1
+					&& (this.gb.board[z][i] == " " || this.gb.board[z][i] != " " && this.gb.board[z][i + 1] != " "));
+		} else
+			return (i < this.gb.board[0].length - 2
+					&& (this.gb.board[z][i] == " " || this.gb.board[z][i] != " " && this.gb.board[z][i - 1] != " "));
 
-		if (this.richtung == 'u') {
-			int i, j;
-			// Schleife 1: Schleife für die Iteration durch Spalten
-			for (int z = 1; z <= this.gb.board[0].length - 2; z++) {
-				i = 1;
-				/*
-				 * 2 While-Schleifen für die Iteration durch Zeilen. Innere Schleife
-				 * inkrementiert Zähler bis verschiebarer Stein gefunden wurde
-				 */
-				while (i < this.gb.board.length - 2) {
-					while (i < this.gb.board.length - 2 && this.gb.board[i][z] == " "
-							|| this.gb.board[i][z] != " " && i == 0
-							|| this.gb.board[i][z] != " " && this.gb.board[(i - 1)][z] != " ") {
+	}
+
+	private boolean counterIsValid(int i) {
+		if (richtung == 'u') {
+			return i < this.gb.board.length - 2;
+		} else if (richtung == 'd' || richtung == 'r')
+			return i > 1;
+		else
+			return i < this.gb.board[0].length - 2;
+
+	}
+
+	private int range() {
+		if (richtung == 'u' || richtung == 'd') {
+			return this.gb.board[0].length - 2;
+		} else
+			return this.gb.board.length - 1;
+	}
+
+	private void shiftGameBoard(String symbol, int x, int y, boolean besetzt) {
+
+		String stein;
+		int valueI = 0, j = 0;
+
+		if (richtung == 'u' || richtung == 'l') {
+			valueI = 1;
+		}
+		if (richtung == 'd') {
+			valueI = this.gb.board.length - 2;
+		}
+		if (richtung == 'r') {
+			valueI = this.gb.board[0].length - 2;
+		}
+
+		for (int z = 1; z <= range(); z++) {
+			int i = valueI;
+
+			while (counterIsValid(i)) {
+				while (notShiftable(i, z)) {
+					if (richtung == 'u' || richtung == 'l')
 						i++;
-					}
-					// Fall wenn innere Schleife abgerochen wird und auf dem Feld gb.board[i][z] ein
-					// Stein liegt
-					if (this.gb.board[i][z] != " ") {
-						stein = this.gb.board[i][z];
-						// Feld o zuvor ein Stein war wird null gesetzt da Stein verschoben wird
-						this.gb.board[i][z] = " ";
-						j = i;
-						// Weitere Schleife Zähler "j" zum zurücklaufen der Felder um dort den Stein der
-						// gefunden wurde an der Richtigen Postition zu setzen
-						while (this.gb.board[j][z] == " " && j > 0)
+					else
+						i--;
+				}
+
+				j = i;
+
+				if (richtung == 'u' || richtung == 'd') {
+					stein = this.gb.board[i][z];
+					this.gb.board[i][z] = " ";
+
+					if (richtung == 'u') {
+						while (j > valueI)
 							if (this.gb.board[j - 1][z] == " ")
 								j--;
 							else
 								break;
 						this.gb.board[j][z] = stein;
-						// Falls zuvor beim Spielzug das Feld auf dem gesetzt werden sollte belegt war
-						// wird vor dem zuletzt verschobenen Stein der zu setzende Stein gesetzt.
 						if (z == y && i == this.gb.board.length - 2 && besetzt == true) {
 							this.gb.board[(j + 1)][(z)] = symbol;
 							besetzt = false;
 						}
-					}
 
-				}
-			}
-		} else if (this.richtung == 'd') {
-			int i, j = 0;
-			// Schleife 1: Schleife für die Iteration durch Spalten
-			for (int z = 1; z <= this.gb.board[0].length - 2; z++) {
-				i = this.gb.board.length - 2;
-				/*
-				 * 2 While-Schleifen für die Iteration durch Zeilen. Innere Schleife
-				 * dekrementiert Zähler bis verschiebarer Stein gefunden wurde
-				 */
-				while (i > 1) {
-					while (i > 1 && this.gb.board[i][z] == " "
-							|| this.gb.board[i][z] != " " && i == this.gb.board.length - 2
-							|| this.gb.board[i][z] != " " && this.gb.board[i + 1][z] != " ") {
-						i--;
-					}
-					// Fall wenn innere Schleife abgerochen wird und auf dem Feld gb.board[i][z] ein
-					// Stein liegt
-					if (this.gb.board[i][z] != " ") {
-						stein = this.gb.board[i][z];
-						// Feld wo zuvor ein Stein war wird null gesetzt da Stein verschoben wird
-						this.gb.board[i][z] = " ";
-						j = i;
-						// Weitere Schleife Zähler "j" zum zurücklaufen der Felder um dort den Stein der
-						// gefunden wurde an der Richtigen Postition zu setzen
-						while (this.gb.board[j][z] == " " && j < this.gb.board.length - 2)
+					} else if (richtung == 'd') {
+						while (j < valueI)
 							if (this.gb.board[j + 1][z] == " ")
 								j++;
 							else
 								break;
 						this.gb.board[j][z] = stein;
-						// Falls zuvor beim Spielzug das Feld auf dem gesetzt werden sollte belegt war
-						// wird vor dem zuletzt verschobenen Stein der zu setzende Stein gesetzt.
 						if (z == y && i == 1 && besetzt == true) {
 							this.gb.board[(j - 1)][(z)] = symbol;
 							besetzt = false;
 						}
-
 					}
 
-				}
-			}
-
-		} else if (this.richtung == 'r') {
-			int i, j;
-			// Schleife 1: Schleife für die Iteration durch Zeilen
-			for (int z = 1; z < this.gb.board.length - 1; z++) {
-				i = this.gb.board[0].length - 2;
-				/*
-				 * 2 While-Schleifen für die Iteration durch Spalten. Innere Schleife
-				 * dekrementiert Zähler bis verschiebarer Stein gefunden wurde
-				 */
-				while (i > 1) {
-					while (i > 1 && this.gb.board[z][i] == " "
-							|| i > 1 && this.gb.board[z][i] != " " && i == this.gb.board.length - 2
-							|| i > 1 && this.gb.board[z][i] != " " && this.gb.board[z][i + 1] != " ") {
-						i--;
-					}
-					// Fall wenn innere Schleife abgerochen wird und auf dem Feld gb.board[z][i] ein
-					// Stein liegt
-					if (this.gb.board[z][i] != " ") {
-						stein = this.gb.board[z][i];
-						// Feld wo zuvor ein Stein war wird null gesetzt da Stein verschoben wird
-						this.gb.board[z][i] = " ";
-						j = i;
-						// Weitere Schleife Zähler "j" zum zurücklaufen der Felder um dort den Stein der
-						// gefunden wurde an der Richtigen Postition zu setzen
-						while (this.gb.board[z][j] == " " && j < this.gb.board.length)
+				} else {
+					stein = this.gb.board[z][i];
+					this.gb.board[z][i] = " ";
+					if (richtung == 'r') {
+						while (j < this.gb.board.length)
 							if (this.gb.board[z][j + 1] == " ")
 								j++;
 							else
 								break;
 						this.gb.board[z][j] = stein;
-						// Falls zuvor beim Spielzug das Feld auf dem gesetzt werden sollte belegt war
-						// wird vor dem zuletzt verschobenen Stein der zu setzende Stein gesetzt.
 						if (z == x && i == 1 && besetzt == true) {
 							this.gb.board[z][(j - 1)] = symbol;
 							besetzt = false;
 						}
 
-					}
-
-				}
-			}
-
-		} else if (this.richtung == 'l') {
-			int i, j;
-			// Schleife 1: Schleife für die Iteration durch Zeilen
-			for (int z = 1; z < this.gb.board.length - 1; z++) {
-				i = 1;
-				/*
-				 * 2 While-Schleifen für die Iteration durch Spalten. Innere Schleife
-				 * inkrementiert Zähler bis verschiebarer Stein gefunden wurde
-				 */
-				while (i < this.gb.board[0].length - 2) {
-					while (i < this.gb.board[0].length - 2 && this.gb.board[z][i] == " "
-							|| i < this.gb.board[0].length - 2 && this.gb.board[z][i] != " " && i == 1
-							|| i < this.gb.board[0].length - 2 && this.gb.board[z][i] != " "
-									&& this.gb.board[z][i - 1] != " ") {
-						i++;
-					}
-					// Fall wenn innere Schleife abgerochen wird und auf dem Feld gb.board[z][i] ein
-					// Stein liegt
-					if (this.gb.board[z][i] != " ") {
-						stein = this.gb.board[z][i];
-						// Feld wo zuvor ein Stein war wird null gesetzt da Stein verschoben wird.
-						this.gb.board[z][i] = " ";
-						j = i;
-						// Weitere Schleife Zähler "j" zum zurücklaufen der Felder um dort den Stein der
-						// gefunden wurde an der Richtigen Postition zu setzen
-						while (this.gb.board[z][j] == " " && j > 1)
+					} else if (richtung == 'l') {
+						while (j > 1)
 							if (this.gb.board[z][j - 1] == " ")
 								j--;
 							else
 								break;
 						this.gb.board[z][j] = stein;
-						// Falls zuvor beim Spielzug das Feld auf dem gesetzt werden sollte belegt war
-						// wird vor dem zuletzt verschobenen Stein der zu setzende Stein gesetzt.
 						if (z == x && i == this.gb.board[0].length - 2 && besetzt == true) {
 							this.gb.board[z][(j + 1)] = symbol;
 							besetzt = false;
 						}
-
 					}
 
 				}
 			}
-
 		}
-
 	}
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
