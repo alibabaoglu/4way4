@@ -48,15 +48,11 @@ public class GameMove {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
-	 * Verschiebt alle Steine in die angegebene Richtung bekommt als Parameter die
-	 * Koordinaten
-	 * 
-	 * @param symbol  (X/O)
-	 * @param x-Wert
-	 * @param y-Wert
-	 * @param besetzt
+	 * Prüft ob im Feld an stelle board[i][z] ein verschiebarer Stein vorhanden ist
+	 * @param i
+	 * @param z
+	 * @return true wenn kein verschiebbarer Stein /false wenn Stein verschiebbar.
 	 */
-	
 	public boolean notShiftable(int i, int z) {
 		if (richtung == 'u') {
 			return (i < this.gb.board.length - 2
@@ -73,6 +69,11 @@ public class GameMove {
 
 	}
 
+	/**
+	 * Überprüft ob der Zähler einer Schleife noch im Gültigkeitsbereich liegt.
+	 * @param i-Zähler
+	 * @return true wenn gültig sonst false
+	 */
 	private boolean counterIsValid(int i) {
 		if (richtung == 'u') {
 			return i < this.gb.board.length - 2;
@@ -82,14 +83,26 @@ public class GameMove {
 			return i < this.gb.board[0].length - 2;
 
 	}
-
+	/**
+	 * Bestimmt wie oft die äußere Schleife (for-schleife) laufen soll
+	 * @return Anzahl der Iterationen
+	 */
 	private int range() {
 		if (richtung == 'u' || richtung == 'd') {
 			return this.gb.board[0].length - 2;
 		} else
 			return this.gb.board.length - 1;
 	}
-
+	/**
+	 * Verschiebt alle Steine in die angegebene Richtung bekommt als Parameter die
+	 * Koordinaten
+	 * 
+	 * @param symbol  (X/O)
+	 * @param x-Wert
+	 * @param y-Wert
+	 * @param besetzt
+	 */
+	
 	private void shiftGameBoard(String symbol, int x, int y, boolean besetzt) {
 
 		String stein;
