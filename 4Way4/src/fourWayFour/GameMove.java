@@ -117,11 +117,13 @@ public class GameMove {
 		if (richtung == 'r') {
 			valueI = this.gb.board[0].length - 2;
 		}
-
+		
+		//Äußerer Schleife steht bei der Richtung UP,DOWN für Zeile, und bei LEFT,RIGHT für Spalte.
 		for (int z = 1; z <= range(); z++) {
 			int i = valueI;
-
+			//Schleife läuft bis an die letzte Stelle von Zeile /Spalte.
 			while (counterIsValid(i)) {
+				//Schleife wird solange durchlaufen bis verschiebarer Stein gefunden wurde.
 				while (notShiftable(i, z)) {
 					if (richtung == 'u' || richtung == 'l')
 						i++;
@@ -130,23 +132,29 @@ public class GameMove {
 				}
 
 				j = i;
-
+				
 				if (richtung == 'u' || richtung == 'd') {
-					stein = this.gb.board[i][z];
-					this.gb.board[i][z] = " ";
-
+					stein = this.gb.board[i][z];//Merke Symbol X/O fürs neu setzen
+					this.gb.board[i][z] = " ";// Feld wo zuvor ein Stein war wird entfernt, da Stein verschoben wird
+					
+					
 					if (richtung == 'u') {
+						// Weitere Schleife Zähler "j" zum zurücklaufen der Felder um dort den Stein der
+						// gefunden wurde an der Richtigen Postition zu setzen
 						while (j > valueI)
 							if (this.gb.board[j - 1][z] == " ")
 								j--;
 							else
 								break;
 						this.gb.board[j][z] = stein;
+						// Falls zuvor beim Spielzug das Feld auf dem gesetzt werden sollte belegt war
+						// wird vor dem zuletzt verschobenen Stein der zu setzende Stein gesetzt.
 						if (z == y && i == this.gb.board.length - 2 && besetzt == true) {
 							this.gb.board[(j + 1)][(z)] = symbol;
 							besetzt = false;
 						}
-
+						
+						//dito wie UP nur mit der Richtung DOWN
 					} else if (richtung == 'd') {
 						while (j < valueI)
 							if (this.gb.board[j + 1][z] == " ")
@@ -159,7 +167,8 @@ public class GameMove {
 							besetzt = false;
 						}
 					}
-
+					
+					//dito wie UP/DOWN nur mit den Richtungen LEFT/RIGHT
 				} else {
 					stein = this.gb.board[z][i];
 					this.gb.board[z][i] = " ";
