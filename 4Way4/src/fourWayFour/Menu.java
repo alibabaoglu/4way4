@@ -84,7 +84,11 @@ public class Menu {
 					System.out.println("Ungueltiger Zug");
 
 				System.out.println(zweiter + "ist am Zug:");
-				move = sc.next();
+				if (!zweiter.equals("KI")) {
+					move = sc.next();
+					validMove = engine.isVaildMove(move);
+				} else
+					break;
 
 			} while (!(validMove = engine.isVaildMove(move)));
 			engine.myMove(move);
