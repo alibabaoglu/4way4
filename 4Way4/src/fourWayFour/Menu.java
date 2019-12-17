@@ -10,8 +10,8 @@ public class Menu {
 		Scanner sc = new Scanner(System.in);
 		GameEngine engine;
 		boolean validInput = false, validMove = true;
-		String move;
-		int row, col, modus, beginner;
+		String move = "", erster, zweiter;
+		int row, col, modus;
 
 		do {
 			System.out.println("Wählen Sie einen Spielmouds:\n \"1\" "
@@ -47,15 +47,20 @@ public class Menu {
 		} while (!validInput);
 
 		if (modus == COMPUTER) {
-			System.out.println("Wenn KI anfangen soll, dann druecke die \"3\"");
-			if (sc.nextInt() == 3)
-				beginner = COMPUTER;
-			else
-				beginner = SPIELER;
+			System.out.println("Wenn KI anfangen soll, dann druecke die \"3\" ,sonst die \"1\" ");
+			if (sc.nextInt() == 3) {
+				erster = "KI";
+				zweiter = "Spieler";
+			} else {
+				erster = "Spieler";
+				zweiter = "KI";
+			}
 
-			engine = new GameEngine(row, col, COMPUTER, beginner);
-		} else
-			engine = new GameEngine(row, col, SPIELER);
+		} else {
+			erster = "Spieler-1";
+			zweiter = "Spieler-2";
+		}
+		engine = new GameEngine(row, col, modus, erster);
 
 		while (engine.isRunning()) {
 
@@ -63,24 +68,26 @@ public class Menu {
 				if (!validMove)
 					System.out.println("Ungueltiger Zug");
 
-				System.out.println("Spieler-1 ist am Zug:");
-				move = sc.next();
-				validMove = engine.isVaildMove(move);
+				System.out.println(erster + " ist am Zug:");
+				if (!erster.equals("KI")) {
+					move = sc.next();
+					validMove = engine.isVaildMove(move);
+				} else
+					break;
+
 			} while (!validMove);
 
 			engine.myMove(move);
-			
 
 			do {
 				if (!validMove)
 					System.out.println("Ungueltiger Zug");
 
-				System.out.println("Spieler-2 ist am Zug:");
+				System.out.println(zweiter + "ist am Zug:");
 				move = sc.next();
 
 			} while (!(validMove = engine.isVaildMove(move)));
 			engine.myMove(move);
-
 
 		}
 		if (!engine.isRunning()) {
@@ -91,6 +98,4 @@ public class Menu {
 		}
 
 	}
-
 }
-
