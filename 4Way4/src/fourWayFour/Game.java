@@ -415,13 +415,13 @@ public class Game {
 		// 4 waagerecht
 		int i = 1;
 
-		while ((i < this.gb.height) && (spieler1 == false || spieler2 == false)) {
+		while ((i < this.gb.height-1) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
-			while ((j < this.gb.width) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j] == "X") {
+			while ((j < this.gb.width-1) && (spieler1 == false || spieler2 == false)) {
+				if (this.gb.board[i][j].equals("X")) {
 					x++;
 					o = 0;
-				} else if (this.gb.board[i][j] == "O") {
+				} else if (this.gb.board[i][j].equals("O")) {
 					o++;
 					x = 0;
 				} else {
@@ -442,14 +442,14 @@ public class Game {
 		}
 //----------------------------------------------------------------------------------------------------------------------------
 		// 4 senkrecht
-		i = 1;
-		while ((i < this.gb.width) && (spieler1 == false || spieler2 == false)) {
-			j = 1;
-			while ((j < this.gb.height) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[j][i] == "X") {
+		j = 1;
+		while ((j < this.gb.width-1) && (spieler1 == false || spieler2 == false)) {
+			i = 1;
+			while ((i < this.gb.height-1) && (spieler1 == false || spieler2 == false)) {
+				if (this.gb.board[i][j].equals("X")) {
 					x++;
 					o = 0;
-				} else if (this.gb.board[j][i] == "O") {
+				} else if (this.gb.board[i][j].equals("O")) {
 					o++;
 					x = 0;
 				} else {
@@ -462,25 +462,25 @@ public class Game {
 				} else if (o == 4) {
 					spieler2 = true;
 				}
-				j++;
+				i++;
 			}
 			x = 0;
 			o = 0;
-			i++;
+			j++;
 		}
 // ----------------------------------------------------------------------------------------------------------------------------
 		// 4 diagonal /
 		i = 4;
-		while ((i < this.gb.height) && (spieler1 == false || spieler2 == false)) {
+		while ((i < this.gb.height-1) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
-			while ((j < this.gb.width - 3) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j] == "X" && this.gb.board[i - 1][j + 1] == "X"
-						&& this.gb.board[i - 2][j + 2] == "X" && this.gb.board[i - 3][j + 3] == "X") {
+			while ((j < this.gb.width - 4) && (spieler1 == false || spieler2 == false)) {
+				if (this.gb.board[i][j].equals("X") && this.gb.board[i - 1][j + 1].equals("X")
+						&& this.gb.board[i - 2][j + 2].equals("X") && this.gb.board[i - 3][j + 3].equals("X")) {
 
 					spieler1 = true;
 
-				} else if (this.gb.board[i][j] == "O" && this.gb.board[i - 1][j + 1] == "O"
-						&& this.gb.board[i - 2][j + 2] == "O" && this.gb.board[i - 3][j + 3] == "O") {
+				} else if (this.gb.board[i][j].equals("O") && this.gb.board[i - 1][j + 1].equals("O")
+						&& this.gb.board[i - 2][j + 2].equals("O") && this.gb.board[i - 3][j + 3].equals("O")) {
 
 					spieler2 = true;
 				}
@@ -491,16 +491,16 @@ public class Game {
 // ----------------------------------------------------------------------------------------------------------------------------
 		// 4 diagonal \
 		i = 1;
-		while ((i < this.gb.height - 3) && (spieler1 == false || spieler2 == false)) {
+		while ((i < this.gb.height - 4) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
-			while ((j < this.gb.width - 3) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j] == "X" && this.gb.board[i + 1][j + 1] == "X"
-						&& this.gb.board[i + 2][j + 2] == "X" && this.gb.board[i + 3][j + 3] == "X") {
+			while ((j < this.gb.width - 4) && (spieler1 == false || spieler2 == false)) {
+				if (this.gb.board[i][j].equals("X") && this.gb.board[i + 1][j + 1].equals("X")
+						&& this.gb.board[i + 2][j + 2].equals("X") && this.gb.board[i + 3][j + 3].equals("X")) {
 
 					spieler1 = true;
 
-				} else if (this.gb.board[i][j] == "O" && this.gb.board[i + 1][j + 1] == "O"
-						&& this.gb.board[i + 2][j + 2] == "O" && this.gb.board[i + 3][j + 3] == "O") {
+				} else if (this.gb.board[i][j].equals("O") && this.gb.board[i + 1][j + 1].equals("O")
+						&& this.gb.board[i + 2][j + 2].equals("O") && this.gb.board[i + 3][j + 3].equals("O")) {
 
 					spieler2 = true;
 				}
