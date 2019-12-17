@@ -1,10 +1,11 @@
 package fourWayFour;
 
 public class GameEngine implements Requirements {
-	private static GameBoard gb;
-	private static Game spiel;
-	private static Player p1,p2;
-	private static KI com;
+	private GameBoard gb;
+	private Game spiel;
+	private Player p1, p2;
+	private KI com;
+	private int counter;
 
 	/**
 	 * Setzt den Stein (X/O) auf das Spielbrett
@@ -13,20 +14,36 @@ public class GameEngine implements Requirements {
 	 */
 
 	public GameEngine(int height, int width) {
-		GameEngine.gb = GameBoard.createBoard(height, width);
+		GameBoard gb = GameBoard.createBoard(height, width);
 		spiel = new Game(gb);
 	}
 
 	@Override
-	public void myMove(String input) {
-
-		spiel.setStone("X", input);
+	// new GameMove(this.gb).setStone("X", input);
+	/**
+	 * Soll den eigenen Zug mitteilen
+	 * 
+	 * @param String eingabe
+	 * @return void
+	 */
+	public void myMove(String eingabe) {
+		if (counter % 2 == 0) {
+			spiel.setStone(eingabe, "X");
+		} else {
+			spiel.setStone(eingabe, "O");
+		}
 	}
 
+
+	/**
+	 * Ließt den Zug des Gegners ein
+	 * 
+	 * @param
+	 * @return String Ausgabe
+	 */
 	@Override
 	public String yourMove() {
-
-		return null;
+		return spiel.ausgabe;
 	}
 
 	@Override
