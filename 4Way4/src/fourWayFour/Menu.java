@@ -61,7 +61,7 @@ public class Menu {
 			zweiter = "Spieler-2";
 		}
 		engine = new GameEngine(row, col, modus, erster);
-
+		
 		while (engine.isRunning()) {
 
 			do {
@@ -76,9 +76,10 @@ public class Menu {
 					break;
 
 			} while (!validMove);
-
+			
 			engine.myMove(move);
-
+			
+			if(engine.isRunning()) {
 			do {
 				if (!validMove)
 					System.out.println("Ungueltiger Zug");
@@ -92,6 +93,8 @@ public class Menu {
 
 			} while (!(validMove = engine.isVaildMove(move)));
 			engine.myMove(move);
+			}
+			
 
 		}
 		if (!engine.isRunning()) {
