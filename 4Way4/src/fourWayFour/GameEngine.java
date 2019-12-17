@@ -17,23 +17,21 @@ public class GameEngine implements Requirements {
 		GameBoard gb = GameBoard.createBoard(height, width);
 		spiel = new Game(gb);
 	}
-
-	@Override
-	// new GameMove(this.gb).setStone("X", input);
+	
 	/**
 	 * Soll den eigenen Zug mitteilen
 	 * 
 	 * @param String eingabe
 	 * @return void
 	 */
+	@Override
 	public void myMove(String eingabe) {
 		if (counter % 2 == 0) {
-			spiel.setStone(eingabe, "X");
+			spiel.setStone("X", eingabe);
 		} else {
-			spiel.setStone(eingabe, "O");
+			spiel.setStone("O", eingabe);
 		}
 	}
-
 
 	/**
 	 * Ließt den Zug des Gegners ein
