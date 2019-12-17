@@ -9,7 +9,8 @@ public class Game {
 	private GameBoard gb;
 	private boolean winner; // true == Spieler 1, false == Spieler 2
 	private int turn;
-
+	protected String ausgabe;
+	
 	/**
 	 * Konstruktor des Spielzugs
 	 * 
@@ -33,6 +34,8 @@ public class Game {
 
 		if (this.isValid(eingabe) == true) {
 
+			this.turn++;
+			this.ausgabe=eingabe;
 			int num = this.gb.height - (this.nummer + 1);
 			int buch = this.buchstabe - 96;
 
@@ -51,6 +54,7 @@ public class Game {
 //-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Prüft ob im Feld an stelle board[i][z] ein verschiebarer Stein vorhanden ist
+	 * 
 	 * @param i
 	 * @param z
 	 * @return true wenn kein verschiebbarer Stein /false wenn Stein verschiebbar.
@@ -73,6 +77,7 @@ public class Game {
 
 	/**
 	 * Überprüft ob der Zähler einer Schleife noch im Gültigkeitsbereich liegt.
+	 * 
 	 * @param i-Zähler
 	 * @return true wenn gültig sonst false
 	 */
@@ -85,8 +90,10 @@ public class Game {
 			return i < this.gb.board[0].length - 2;
 
 	}
+
 	/**
 	 * Bestimmt wie oft die äußere Schleife (for-schleife) laufen soll
+	 * 
 	 * @return Anzahl der Iterationen
 	 */
 	private int range() {
@@ -95,6 +102,7 @@ public class Game {
 		} else
 			return this.gb.board.length - 1;
 	}
+
 	/**
 	 * Verschiebt alle Steine in die angegebene Richtung bekommt als Parameter die
 	 * Koordinaten
@@ -104,7 +112,7 @@ public class Game {
 	 * @param y-Wert
 	 * @param besetzt
 	 */
-	
+
 	private void shiftGameBoard(String symbol, int x, int y, boolean besetzt) {
 
 		String stein;
@@ -119,13 +127,14 @@ public class Game {
 		if (richtung == 'r') {
 			valueI = this.gb.board[0].length - 2;
 		}
-		
-		//Äußerer Schleife steht bei der Richtung UP,DOWN für Zeile, und bei LEFT,RIGHT für Spalte.
+
+		// Äußerer Schleife steht bei der Richtung UP,DOWN für Zeile, und bei LEFT,RIGHT
+		// für Spalte.
 		for (int z = 1; z <= range(); z++) {
 			int i = valueI;
-			//Schleife läuft bis an die letzte Stelle von Zeile /Spalte.
+			// Schleife läuft bis an die letzte Stelle von Zeile /Spalte.
 			while (counterIsValid(i)) {
-				//Schleife wird solange durchlaufen bis verschiebarer Stein gefunden wurde.
+				// Schleife wird solange durchlaufen bis verschiebarer Stein gefunden wurde.
 				while (notShiftable(i, z)) {
 					if (richtung == 'u' || richtung == 'l')
 						i++;
@@ -134,12 +143,11 @@ public class Game {
 				}
 
 				j = i;
-				
+
 				if (richtung == 'u' || richtung == 'd') {
-					stein = this.gb.board[i][z];//Merke Symbol X/O fürs neu setzen
+					stein = this.gb.board[i][z];// Merke Symbol X/O fürs neu setzen
 					this.gb.board[i][z] = " ";// Feld wo zuvor ein Stein war wird entfernt, da Stein verschoben wird
-					
-					
+
 					if (richtung == 'u') {
 						// Weitere Schleife Zähler "j" zum zurücklaufen der Felder um dort den Stein der
 						// gefunden wurde an der Richtigen Postition zu setzen
@@ -155,8 +163,8 @@ public class Game {
 							this.gb.board[(j + 1)][(z)] = symbol;
 							besetzt = false;
 						}
-						
-						//dito wie UP nur mit der Richtung DOWN
+
+						// dito wie UP nur mit der Richtung DOWN
 					} else if (richtung == 'd') {
 						while (j < valueI)
 							if (this.gb.board[j + 1][z] == " ")
@@ -169,8 +177,8 @@ public class Game {
 							besetzt = false;
 						}
 					}
-					
-					//dito wie UP/DOWN nur mit den Richtungen LEFT/RIGHT
+
+					// dito wie UP/DOWN nur mit den Richtungen LEFT/RIGHT
 				} else {
 					stein = this.gb.board[z][i];
 					this.gb.board[z][i] = " ";
@@ -396,19 +404,17 @@ public class Game {
 		return false;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
+//------------------------------------------------------------------------------------
 	public boolean isRunning() {
 		int x = 0;
 		int o = 0;
+		int j;
 		boolean spieler1 = false;
 		boolean spieler2 = false;
 //--------------------------------------------------------------------------------------------------------------------------------------------
 		// 4 waagerecht
 		int i = 1;
-		int j;
+
 		while ((i < this.gb.height) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
 			while ((j < this.gb.width) && (spieler1 == false || spieler2 == false)) {
@@ -531,8 +537,3 @@ public class Game {
 		}
 	}
 }
-//       1            2            3            4
-//| x	       |          x | x  x  x  x | x          |
-//|    x       |       x    |            | x          |
-//|       x    |    x       |            | x          |
-//|          x | x          |            | x          |
