@@ -8,7 +8,7 @@ public class TestGameMove {
 		
 		
 		GameBoard gb= GameBoard.createBoard(7, 9);
-		GameMove sz = new GameMove(gb);
+		Game sz = new Game(gb);
 		//Testspiel Orpheas vs Ali
 		sz.setStone(s1.symbol,"1c");
 		sz.setStone(s2.symbol,"1au");
