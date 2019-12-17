@@ -9,7 +9,7 @@ public class Game {
 	private GameBoard gb;
 	private boolean winner; // true == Spieler 1, false == Spieler 2
 	private int turn;
-	protected String ausgabe;
+	protected String ausgabe="noch kein Zug vorhanden";
 	
 	/**
 	 * Konstruktor des Spielzugs
