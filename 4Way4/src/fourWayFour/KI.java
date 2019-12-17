@@ -24,10 +24,8 @@ public class KI {
 			return easyMove();
 		else if (medium)
 			return mediumMove();
-		else if (hard)
-			return hardMove();
 		else
-			throw new GameException("Kein Schwierigkeitsgrad");
+			return hardMove();
 	}
 
 	private String easyMove() {
@@ -77,13 +75,14 @@ public class KI {
 
 	}
 
-	public String mediumMove() {
+	private String mediumMove() {
 		//TODO:implement Method
 		return null;
 	}
 
-	public String hardMove() {
+	private String hardMove() {
 		//TODO: implement Method
 		return null;
 	}
+
 }
