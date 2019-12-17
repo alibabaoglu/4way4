@@ -24,8 +24,10 @@ public class KI {
 			return easyMove();
 		else if (medium)
 			return mediumMove();
-		else
+		else if (hard)
 			return hardMove();
+		else
+			throw new GameException("Kein Schwierigkeitsgrad");
 	}
 
 	private String easyMove() {
@@ -42,7 +44,6 @@ public class KI {
 				ecke = true;
 			richtung = "d";
 		}
-
 		// oben
 		if (rnd == 2) {
 			spalte = (int) (Math.random() * (gb.width - 2) + 1);
@@ -50,7 +51,6 @@ public class KI {
 			if (spalte == 1 || spalte == gb.width - 2)
 				ecke = true;
 			richtung = "u";
-
 		}
 		// links
 		if (rnd == 3) {
@@ -72,17 +72,15 @@ public class KI {
 			return "" + zeile + (char) (spalte + 96) + richtung;
 		else
 			return "" + zeile + (char) (spalte + 96);
-
 	}
 
 	private String mediumMove() {
-		//TODO:implement Method
+		// TODO:implement Method
 		return null;
 	}
 
 	private String hardMove() {
-		//TODO: implement Method
+		// TODO: implement Method
 		return null;
 	}
-
 }
