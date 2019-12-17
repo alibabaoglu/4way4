@@ -3,9 +3,8 @@ package fourWayFour;
 public class GameEngine implements Requirements {
 	private GameBoard gb;
 	private Game spiel;
-	private Player p1, p2;
-	private KI com;
 	private int counter;
+	private int modus, beginner;
 
 	/**
 	 * Setzt den Stein (X/O) auf das Spielbrett
@@ -13,24 +12,30 @@ public class GameEngine implements Requirements {
 	 * @param input
 	 */
 
-	public GameEngine(int height, int width) {
+	public GameEngine(int height, int width, int modus, int... beginner) {
 		GameBoard gb = GameBoard.createBoard(height, width);
 		spiel = new Game(gb);
+		this.modus = modus;
+		if(modus==1)
+		this.beginner = beginner[0];
 	}
-	
+
+	@Override
 	/**
 	 * Soll den eigenen Zug mitteilen
 	 * 
 	 * @param String eingabe
 	 * @return void
 	 */
-	@Override
 	public void myMove(String eingabe) {
-		if (counter % 2 == 0) {
-			spiel.setStone("X", eingabe);
-		} else {
-			spiel.setStone("O", eingabe);
+		if (modus == 2) {
+			if (counter % 2 == 0) {
+				spiel.setStone( "X",eingabe);
+			} else {
+				spiel.setStone("O",eingabe);
+			}
 		}
+		counter++;
 	}
 
 	/**
