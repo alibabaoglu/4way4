@@ -108,8 +108,8 @@ public class Game {
 	 * Koordinaten
 	 * 
 	 * @param symbol  (X/O)
-	 * @param x-Wert
-	 * @param y-Wert
+	 * @param         x-Wert
+	 * @param         y-Wert
 	 * @param besetzt
 	 */
 
@@ -220,7 +220,9 @@ public class Game {
 	 * @return Ist der Zug gueltig?
 	 */
 	protected boolean isValid(String input) {
-		return (this.isValidString(input) == this.isValidSpace() == true);
+
+		return this.isValidString(input) && this.isValidSpace();
+
 	}
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -418,10 +420,10 @@ public class Game {
 		while ((i < this.gb.height) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
 			while ((j < this.gb.width) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j] == "X") {
+				if (this.gb.board[i][j].equals("X")) {
 					x++;
 					o = 0;
-				} else if (this.gb.board[i][j] == "O") {
+				} else if (this.gb.board[i][j].equals("O")) {
 					o++;
 					x = 0;
 				} else {
@@ -431,6 +433,7 @@ public class Game {
 				// hat x/o 4er-Kette?
 				if (x == 4) {
 					spieler1 = true;
+
 				} else if (o == 4) {
 					spieler2 = true;
 				}
@@ -446,10 +449,10 @@ public class Game {
 		while ((i < this.gb.width) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
 			while ((j < this.gb.height) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[j][i] == "X") {
+				if (this.gb.board[j][i].equals("X")) {
 					x++;
 					o = 0;
-				} else if (this.gb.board[j][i] == "O") {
+				} else if (this.gb.board[j][i].equals("O")) {
 					o++;
 					x = 0;
 				} else {
@@ -474,13 +477,13 @@ public class Game {
 		while ((i < this.gb.height) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
 			while ((j < this.gb.width - 3) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j] == "X" && this.gb.board[i - 1][j + 1] == "X"
-						&& this.gb.board[i - 2][j + 2] == "X" && this.gb.board[i - 3][j + 3] == "X") {
+				if (this.gb.board[i][j].equals("X") && this.gb.board[i - 1][j + 1].equals("X")
+						&& this.gb.board[i - 2][j + 2].equals("X") && this.gb.board[i - 3][j + 3].equals("X")) {
 
 					spieler1 = true;
 
-				} else if (this.gb.board[i][j] == "O" && this.gb.board[i - 1][j + 1] == "O"
-						&& this.gb.board[i - 2][j + 2] == "O" && this.gb.board[i - 3][j + 3] == "O") {
+				} else if (this.gb.board[i][j].equals("O") && this.gb.board[i - 1][j + 1].equals("O")
+						&& this.gb.board[i - 2][j + 2].equals("O") && this.gb.board[i - 3][j + 3].equals("O")) {
 
 					spieler2 = true;
 				}
@@ -494,13 +497,13 @@ public class Game {
 		while ((i < this.gb.height - 3) && (spieler1 == false || spieler2 == false)) {
 			j = 1;
 			while ((j < this.gb.width - 3) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j] == "X" && this.gb.board[i + 1][j + 1] == "X"
-						&& this.gb.board[i + 2][j + 2] == "X" && this.gb.board[i + 3][j + 3] == "X") {
+				if (this.gb.board[i][j].equals("X") && this.gb.board[i + 1][j + 1].equals("X")
+						&& this.gb.board[i + 2][j + 2].equals("X") && this.gb.board[i + 3][j + 3].equals("X")) {
 
 					spieler1 = true;
 
-				} else if (this.gb.board[i][j] == "O" && this.gb.board[i + 1][j + 1] == "O"
-						&& this.gb.board[i + 2][j + 2] == "O" && this.gb.board[i + 3][j + 3] == "O") {
+				} else if (this.gb.board[i][j].equals("O") && this.gb.board[i + 1][j + 1].equals("O")
+						&& this.gb.board[i + 2][j + 2].equals("O") && this.gb.board[i + 3][j + 3].equals("O")) {
 
 					spieler2 = true;
 				}
@@ -520,8 +523,8 @@ public class Game {
 		} else if (spieler1 == true || spieler2 == true) {
 			this.winner = spieler1; // true == Spieler 1, false == Spieler 2
 			return false;
-		}
-		return true;
+		} else
+			return true;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
