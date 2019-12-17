@@ -8,9 +8,9 @@ public class Game {
 	private char buchstabe, richtung;
 	private GameBoard gb;
 	private boolean winner; // true == Spieler 1, false == Spieler 2
-	private int turn;
-	protected String ausgabe="noch kein Zug vorhanden";
-	
+	private int turn = 0;
+	protected String ausgabe = "noch kein Zug vorhanden";
+
 	/**
 	 * Konstruktor des Spielzugs
 	 * 
@@ -35,7 +35,7 @@ public class Game {
 		if (this.isValid(eingabe) == true) {
 
 			this.turn++;
-			this.ausgabe=eingabe;
+			this.ausgabe = eingabe;
 			int num = this.gb.height - (this.nummer + 1);
 			int buch = this.buchstabe - 96;
 
