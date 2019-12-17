@@ -84,5 +84,4 @@ public class KI {
 		//TODO: implement Method
 		return null;
 	}
-
 }
