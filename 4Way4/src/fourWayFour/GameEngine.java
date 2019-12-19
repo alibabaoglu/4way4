@@ -1,78 +1,92 @@
 package fourWayFour;
 
+/**
+ * Das gesamte Spiel
+ *
+ */
 public class GameEngine implements Requirements {
 	private GameBoard gb;
-	private Game spiel;
+	private Game game;
 	private KI com;
-	private int counter, modus;
+	private int counter, mode;
 	private String beginner;
 
 	/**
 	 * Setzt den Stein (X/O) auf das Spielbrett
 	 * 
-	 * @param input
+	 * @param height
+	 * @param width
+	 * @param mode
+	 * @param beginner
 	 */
-
-	public GameEngine(int height, int width, int modus, String... beginner) {
+	public GameEngine(int height, int width, int mode, String... beginner) {
 		GameBoard gb = GameBoard.createBoard(height, width);
-		spiel = new Game(gb);
-		this.modus = modus;
-		if (modus == 1) {
+		game = new Game(gb);
+		this.mode = mode;
+		if (mode == 1) {
 			this.com = new KI(1, gb);
 			this.beginner = beginner[0];
 		}
 	}
 
-	@Override
 	/**
 	 * Soll den eigenen Zug mitteilen
 	 * 
-	 * @param String eingabe
-	 * @return void
+	 * @param input
 	 */
-	public void myMove(String eingabe) {
-		if (modus == 2) {
+	@Override
+	public void myMove(String input) {
+		if (mode == 2) {
 			if (counter % 2 == 0) {
-				spiel.setStone("X", eingabe);
+				game.setStone("X", input);
 			} else {
-				spiel.setStone("O", eingabe);
+				game.setStone("O", input);
 			}
-		} else if (modus == 1) {
+		} else if (mode == 1) {
 			if (beginner.equals("KI")) {
 				if (counter % 2 == 0) {
-					spiel.setStone("X", com.move());
+					game.setStone("X", com.move());
 				} else
-					spiel.setStone("O", eingabe);
+					game.setStone("O", input);
 
 			} else {
 				if (counter % 2 == 0) {
-					spiel.setStone("X", eingabe);
+					game.setStone("X", input);
 				} else
-					spiel.setStone("O", com.move());
+					game.setStone("O", com.move());
 			}
 		}
 		counter++;
 	}
 
 	/**
-	 * Ließt den Zug des Gegners ein
+	 * Gibt den letzten Zug zurueck
 	 * 
-	 * @param
-	 * @return String Ausgabe
+	 * @return letzten validen Zug
 	 */
 	@Override
 	public String yourMove() {
-		return spiel.ausgabe;
+		return game.lastTurn;
 	}
 
+	/**
+	 * Sagt ob das Spiel noch laeuft
+	 * 
+	 * @return true (laeuft noch) / false (laeuft nicht mehr)
+	 */
 	@Override
 	public boolean isRunning() {
-		return spiel.isRunning();
+		return game.isRunning();
 	}
 
+	/**
+	 * Sagt wer gewonnen hat
+	 * 
+	 * @return true (Spieler 1) / false (Spieler 2)
+	 */
 	@Override
 	public boolean whoWon() {
-		return spiel.whoWon();
+		return game.whoWon();
 	}
 
 	/**
@@ -92,6 +106,6 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public boolean isVaildMove(String input) {
-		return spiel.isValid(input) == true;
+		return game.isValid(input) == true;
 	}
 }
