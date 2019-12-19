@@ -1,7 +1,7 @@
 package fourWayFour;
 
 /**
- * Fehler wegen falscher Eingabe bein Spiel
+ * Fehler wegen falscher Eingabe beim Spiel
  */
 @SuppressWarnings("serial")
 public class GameException extends IllegalArgumentException {
