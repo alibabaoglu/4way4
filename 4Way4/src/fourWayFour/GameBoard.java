@@ -10,12 +10,12 @@ public class GameBoard {
 	/**
 	 * Konstruktor mit zwei Parameter für Zeile und Spalte
 	 * 
-	 * @param hoehe
-	 * @param breite
+	 * @param hight
+	 * @param width
 	 */
-	private GameBoard(int hoehe, int breite) {
-		this.height = (hoehe + 2); // +2 für den Rahmen
-		this.width = (breite + 2); // +2 für den Rahmen
+	private GameBoard(int hight, int width) {
+		this.height = (hight + 2); // +2 für den Rahmen
+		this.width = (width + 2); // +2 für den Rahmen
 		this.board = new String[this.height][this.width];
 	}
 
@@ -23,13 +23,13 @@ public class GameBoard {
 	 * Factory Methode zum erstellen eines Spielbretts
 	 * 
 	 * @param height
-	 * @param breite
+	 * @param width
 	 * @return das neu erstellte Spielbrett
 	 */
-	public static GameBoard createBoard(int height, int breite) {
+	public static GameBoard createBoard(int height, int width) {
 
-		if (height >= 7 && height <= 10 && breite >= 7 && breite <= 10) {
-			GameBoard gb = new GameBoard(height, breite);
+		if (height >= 7 && height <= 10 && width >= 7 && width <= 10) {
+			GameBoard gb = new GameBoard(height, width);
 
 			// 4 Leere Ecken fuer das Koordinatensystem
 			gb.board[0][0] = "  ";
@@ -75,14 +75,14 @@ public class GameBoard {
 	 */
 	public void printBoard() {
 		OutputCollection.outputWithNewLine();
-		String rahmen = " ";
+		String frame = " ";
 
 		for (int i = 0; i < this.width; i++) {
-			rahmen += "͞͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞|";
+			frame += "͞͞ ͞ ͞ ͞ ͞ ͞ ͞ ͞|";
 		}
 
 		for (int i = 0; i < this.board.length; i++) {
-			OutputCollection.outputWithNewLine(rahmen);
+			OutputCollection.outputWithNewLine(frame);
 			for (int j = 0; j < this.board[i].length; j++) {
 				if (j == this.board[i].length - 1)
 					OutputCollection.output("   " + this.board[i][j] + "  |");
@@ -91,6 +91,6 @@ public class GameBoard {
 			}
 			OutputCollection.outputWithNewLine();
 		}
-		OutputCollection.outputWithNewLine(rahmen);
+		OutputCollection.outputWithNewLine(frame);
 	}
 }
