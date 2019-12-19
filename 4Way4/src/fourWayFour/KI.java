@@ -4,9 +4,9 @@ public class KI {
 	private boolean hard, medium, easy;
 	private GameBoard gb;
 
-	public KI(int schwierigkeit, GameBoard gb) {
+	public KI(int difficulty, GameBoard gb) {
 		this.gb = gb;
-		switch (schwierigkeit) {
+		switch (difficulty) {
 		case 1:
 			easy = true;
 			break;
@@ -24,65 +24,63 @@ public class KI {
 			return easyMove();
 		else if (medium)
 			return mediumMove();
-		else
+		else if (hard)
 			return hardMove();
+		else
+			throw new GameException("Kein Schwierigkeitsgrad");
 	}
 
 	private String easyMove() {
 		// In welche Richtung soll eingeworfen werden?
-		boolean ecke = false;
-		int spalte = 0, zeile = 0;
-		String richtung = "";
+		boolean corner = false;
+		int column = 0, line = 0;
+		String direction = "";
 		int rnd = (int) (Math.random() * 4 + 1);
 		// Unten
 		if (rnd == 1) {
-			spalte = (int) (Math.random() * (gb.width - 2) + 1);
-			zeile = gb.height - 2;
-			if (spalte == 1 || spalte == gb.width - 2)
-				ecke = true;
-			richtung = "d";
+			column = (int) (Math.random() * (gb.width - 2) + 1);
+			line = gb.height - 2;
+			if (column == 1 || column == gb.width - 2)
+				corner = true;
+			direction = "d";
 		}
-
 		// oben
 		if (rnd == 2) {
-			spalte = (int) (Math.random() * (gb.width - 2) + 1);
-			zeile = 1;
-			if (spalte == 1 || spalte == gb.width - 2)
-				ecke = true;
-			richtung = "u";
-
+			column = (int) (Math.random() * (gb.width - 2) + 1);
+			line = 1;
+			if (column == 1 || column == gb.width - 2)
+				corner = true;
+			direction = "u";
 		}
 		// links
 		if (rnd == 3) {
-			spalte = gb.width - 2;
-			zeile = (int) (Math.random() * (gb.height - 2) + 1);
-			if (zeile == 1 || zeile == gb.height - 2)
-				ecke = true;
-			richtung = "l";
+			column = gb.width - 2;
+			line = (int) (Math.random() * (gb.height - 2) + 1);
+			if (line == 1 || line == gb.height - 2)
+				corner = true;
+			direction = "l";
 		}
 		// rechts
 		if (rnd == 4) {
-			spalte = 1;
-			zeile = (int) (Math.random() * (gb.height - 2) + 1);
-			if (zeile == 1 || zeile == gb.height - 2)
-				ecke = true;
-			richtung = "r";
+			column = 1;
+			line = (int) (Math.random() * (gb.height - 2) + 1);
+			if (line == 1 || line == gb.height - 2)
+				corner = true;
+			direction = "r";
 		}
-		if (ecke)
-			return "" + zeile + (char) (spalte + 96) + richtung;
+		if (corner)
+			return "" + line + (char) (column + 96) + direction;
 		else
-			return "" + zeile + (char) (spalte + 96);
-
+			return "" + line + (char) (column + 96);
 	}
 
 	private String mediumMove() {
-		//TODO:implement Method
+		// TODO:implement Method
 		return null;
 	}
 
 	private String hardMove() {
-		//TODO: implement Method
+		// TODO: implement Method
 		return null;
 	}
-
 }
