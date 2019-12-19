@@ -2,8 +2,6 @@ package fourWayFour;
 
 import java.util.*;
 
-import fourWayFour.View.OutputCollection;
-
 public class Menu {
 	final static int COMPUTER = 1;
 	final static int SPIELER = 2;
