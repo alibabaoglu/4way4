@@ -4,12 +4,12 @@ package fourWayFour;
  * Ein Spielzug
  */
 public class Game {
-	private int nummer;
-	private char buchstabe, richtung;
+	private int number;
+	private char character, direction;
 	private GameBoard gb;
 	private boolean winner; // true == Spieler 1, false == Spieler 2
 	private int turn = 0;
-	protected String ausgabe = "noch kein Zug vorhanden";
+	protected String lastTurn = "noch kein Zug vorhanden";
 
 	/**
 	 * Konstruktor des Spielzugs
@@ -25,48 +25,49 @@ public class Game {
 	 * Setzt den Stein (X/O) auf das Spielbrett mithilfe der gegebenen "Koordinaten"
 	 * und Richtung in die der Stein fallen soll
 	 * 
-	 * @param symbol
-	 * @param eingabe
+	 * @param symbol zusetzendes Zeichen
+	 * @param entry  Eingabestring
 	 */
-	public void setStone(String symbol, String eingabe) {
+	public void setStone(String symbol, String entry) {
 
-		boolean besetzt = false;
+		boolean occupied = false;
 
-		if (this.isValid(eingabe) == true) {
+		if (this.isValid(entry) == true) {
 
 			this.turn++;
-			this.ausgabe = eingabe;
-			int num = this.gb.height - (this.nummer + 1);
-			int buch = this.buchstabe - 96;
+			this.lastTurn = entry;
 
-			if (this.gb.board[num][buch] == " ") {
-				this.gb.board[num][buch] = "" + symbol;
+			int x = this.gb.height - (this.number + 1);
+			int y = this.character - 96;
+
+			if (this.gb.board[x][y] == " ") {
+				this.gb.board[x][y] = symbol;
 			} else {
-				besetzt = true;
+				occupied = true;
 			}
-			this.shiftGameBoard(symbol, num, buch, besetzt);
+			this.shiftGameBoard(symbol, x, y, occupied);
 			this.gb.printBoard();
 		} else {
-			throw new GameException("Ungültiger Zug: " + eingabe);
+			throw new GameException("Ungültiger Zug: " + entry);
 		}
 	}
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
-	 * Prüft ob im Feld an stelle board[i][z] ein verschiebarer Stein vorhanden ist
+	 * Prueft ob im Feld an der Stelle ein verschiebarer Stein vorhanden ist
 	 * 
 	 * @param i
 	 * @param z
-	 * @return true wenn kein verschiebbarer Stein /false wenn Stein verschiebbar.
+	 * @return true (kein verschiebbarer Stein) / false (Stein verschiebbar)
 	 */
 	public boolean notShiftable(int i, int z) {
-		if (richtung == 'u') {
+		if (direction == 'u') {
 			return (i < this.gb.board.length - 2
 					&& (this.gb.board[i][z] == " " || this.gb.board[i][z] != " " && this.gb.board[(i - 1)][z] != " "));
-		} else if (richtung == 'd') {
+		} else if (direction == 'd') {
 			return (i > 1
 					&& (this.gb.board[i][z] == " " || this.gb.board[i][z] != " " && this.gb.board[i + 1][z] != " "));
-		} else if (richtung == 'r') {
+		} else if (direction == 'r') {
 			return (i > 1
 					&& (this.gb.board[z][i] == " " || this.gb.board[z][i] != " " && this.gb.board[z][i + 1] != " "));
 		} else
@@ -76,28 +77,28 @@ public class Game {
 	}
 
 	/**
-	 * Überprüft ob der Zähler einer Schleife noch im Gültigkeitsbereich liegt.
+	 * Ueberprueft ob der Zaehler einer Schleife noch im Gueltigkeitsbereich liegt
 	 * 
-	 * @param i-Zähler
+	 * @param counter Zaehler
 	 * @return true wenn gültig sonst false
 	 */
-	private boolean counterIsValid(int i) {
-		if (richtung == 'u') {
-			return i < this.gb.board.length - 2;
-		} else if (richtung == 'd' || richtung == 'r')
-			return i > 1;
+	private boolean counterIsValid(int counter) {
+		if (direction == 'u') {
+			return counter < this.gb.board.length - 2;
+		} else if (direction == 'd' || direction == 'r')
+			return counter > 1;
 		else
-			return i < this.gb.board[0].length - 2;
+			return counter < this.gb.board[0].length - 2;
 
 	}
 
 	/**
-	 * Bestimmt wie oft die äußere Schleife (for-schleife) laufen soll
+	 * Bestimmt wie oft die aeussere Schleife (for-schleife) laufen soll
 	 * 
 	 * @return Anzahl der Iterationen
 	 */
 	private int range() {
-		if (richtung == 'u' || richtung == 'd') {
+		if (direction == 'u' || direction == 'd') {
 			return this.gb.board[0].length - 2;
 		} else
 			return this.gb.board.length - 1;
@@ -107,36 +108,37 @@ public class Game {
 	 * Verschiebt alle Steine in die angegebene Richtung bekommt als Parameter die
 	 * Koordinaten
 	 * 
-	 * @param symbol  (X/O)
-	 * @param         x-Wert
-	 * @param         y-Wert
-	 * @param besetzt
+	 * @param symbol   (X/O)
+	 * @param x-Wert
+	 * @param y-Wert
+	 * @param occupied
 	 */
 
-	private void shiftGameBoard(String symbol, int x, int y, boolean besetzt) {
+	private void shiftGameBoard(String symbol, int x, int y, boolean occupied) {
 
-		String stein;
+		String newStone;
 		int valueI = 0, j = 0;
 
-		if (richtung == 'u' || richtung == 'l') {
+		if (direction == 'u' || direction == 'l') {
 			valueI = 1;
 		}
-		if (richtung == 'd') {
+		if (direction == 'd') {
 			valueI = this.gb.board.length - 2;
 		}
-		if (richtung == 'r') {
+		if (direction == 'r') {
 			valueI = this.gb.board[0].length - 2;
 		}
 
-		// Äußerer Schleife steht bei der Richtung UP,DOWN für Zeile, und bei LEFT,RIGHT
+		// Ausserer Schleife steht bei der Richtung UP,DOWN für Zeile, und bei
+		// LEFT,RIGHT
 		// für Spalte.
 		for (int z = 1; z <= range(); z++) {
 			int i = valueI;
-			// Schleife läuft bis an die letzte Stelle von Zeile /Spalte.
+			// Schleife laeuft bis an die letzte Stelle von Zeile / Spalte.
 			while (counterIsValid(i)) {
 				// Schleife wird solange durchlaufen bis verschiebarer Stein gefunden wurde.
 				while (notShiftable(i, z)) {
-					if (richtung == 'u' || richtung == 'l')
+					if (direction == 'u' || direction == 'l')
 						i++;
 					else
 						i--;
@@ -144,69 +146,69 @@ public class Game {
 
 				j = i;
 
-				if (richtung == 'u' || richtung == 'd') {
-					stein = this.gb.board[i][z];// Merke Symbol X/O fürs neu setzen
+				if (direction == 'u' || direction == 'd') {
+					newStone = this.gb.board[i][z];// Merke Symbol X/O fürs neu setzen
 					this.gb.board[i][z] = " ";// Feld wo zuvor ein Stein war wird entfernt, da Stein verschoben wird
 
-					if (richtung == 'u') {
-						// Weitere Schleife Zähler "j" zum zurücklaufen der Felder um dort den Stein der
+					if (direction == 'u') {
+						// Weitere Schleife Zaehler "j" zum zuruecklaufen der Felder um dort den Stein
+						// der
 						// gefunden wurde an der Richtigen Postition zu setzen
 						while (j > valueI)
 							if (this.gb.board[j - 1][z] == " ")
 								j--;
 							else
 								break;
-						this.gb.board[j][z] = stein;
+						this.gb.board[j][z] = newStone;
 						// Falls zuvor beim Spielzug das Feld auf dem gesetzt werden sollte belegt war
 						// wird vor dem zuletzt verschobenen Stein der zu setzende Stein gesetzt.
-						if (z == y && i == this.gb.board.length - 2 && besetzt == true) {
+						if (z == y && i == this.gb.board.length - 2 && occupied == true) {
 							this.gb.board[(j + 1)][(z)] = symbol;
-							besetzt = false;
+							occupied = false;
 						}
 
 						// dito wie UP nur mit der Richtung DOWN
-					} else if (richtung == 'd') {
+					} else if (direction == 'd') {
 						while (j < valueI)
 							if (this.gb.board[j + 1][z] == " ")
 								j++;
 							else
 								break;
-						this.gb.board[j][z] = stein;
-						if (z == y && i == 1 && besetzt == true) {
+						this.gb.board[j][z] = newStone;
+						if (z == y && i == 1 && occupied == true) {
 							this.gb.board[(j - 1)][(z)] = symbol;
-							besetzt = false;
+							occupied = false;
 						}
 					}
 
 					// dito wie UP/DOWN nur mit den Richtungen LEFT/RIGHT
 				} else {
-					stein = this.gb.board[z][i];
+					newStone = this.gb.board[z][i];
 					this.gb.board[z][i] = " ";
-					if (richtung == 'r') {
+					if (direction == 'r') {
 						while (j < this.gb.board.length)
 							if (this.gb.board[z][j + 1] == " ")
 								j++;
 							else
 								break;
-						this.gb.board[z][j] = stein;
-						if (z == x && i == 1 && besetzt == true) {
+						this.gb.board[z][j] = newStone;
+						if (z == x && i == 1 && occupied == true) {
 							this.gb.board[z][(j - 1)] = symbol;
-							besetzt = false;
+							occupied = false;
 						}
 
-					} else if (richtung == 'l') {
+					} else if (direction == 'l') {
 						while (j > 1)
 							if (this.gb.board[z][j - 1] == " ")
 								j--;
 							else
 								break;
-						this.gb.board[z][j] = stein;
-						if (z == x && i == this.gb.board[0].length - 2 && besetzt == true) {
+						this.gb.board[z][j] = newStone;
+						if (z == x && i == this.gb.board[0].length - 2 && occupied == true) {
 							this.gb.board[z][(j + 1)] = symbol;
-							besetzt = false;
+							occupied = false;
 						}
 					}
-
 				}
 			}
 		}
@@ -214,7 +216,7 @@ public class Game {
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
-	 * Überprüft ob ein Zug gültig ist
+	 * Ueberprueft ob ein Zug gueltig ist
 	 * 
 	 * @param input der zu ueberpruefende Zug
 	 * @return Ist der Zug gueltig?
@@ -222,7 +224,6 @@ public class Game {
 	protected boolean isValid(String input) {
 
 		return this.isValidString(input) && this.isValidSpace();
-
 	}
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -230,27 +231,27 @@ public class Game {
 	 * Ueberprueft ob ein Zugeingabe-String x zulaessig ist und speichert die
 	 * Variablen (Nummer num, Buchstabe buch und Richtung rich)
 	 * 
-	 * @param zugeingabe zu uerpruefender String
+	 * @param moveEntry zu uerpruefender String
 	 * @return ist gueltige Eingabe?
 	 */
-	private boolean isValidString(String zugeingabe) {
+	private boolean isValidString(String moveEntry) {
 		// Laenge des Strings x, x<2 oder 3<x
-		if (zugeingabe.length() > 3 || zugeingabe.length() < 2) {
+		if (moveEntry.length() > 3 || moveEntry.length() < 2) {
 
 			// Laenge des Strings x=4
-			if (zugeingabe.length() == 4) {
+			if (moveEntry.length() == 4) {
 
 				// x="10a"rich oder x="10"buch(letzter Buchstabe)rich
-				if ((zugeingabe.charAt(0) == '1') && (zugeingabe.charAt(1) == '0')
-						&& ((zugeingabe.charAt(2) == 'a') || (zugeingabe.charAt(2) == (char) ('a' + gb.width - 3)))) {
-					this.nummer = 10;
-					this.buchstabe = zugeingabe.charAt(2);
+				if ((moveEntry.charAt(0) == '1') && (moveEntry.charAt(1) == '0')
+						&& ((moveEntry.charAt(2) == 'a') || (moveEntry.charAt(2) == (char) ('a' + gb.width - 3)))) {
+					this.number = 10;
+					this.character = moveEntry.charAt(2);
 				}
 				// x="a10"rich oder x=buch(letzter Buchstabe)"10"rich
-				else if ((zugeingabe.charAt(1) == '1') && (zugeingabe.charAt(2) == '0')
-						&& ((zugeingabe.charAt(0) == 'a') || (zugeingabe.charAt(0) == (char) ('a' + gb.width - 3)))) {
-					this.nummer = 10;
-					this.buchstabe = zugeingabe.charAt(0);
+				else if ((moveEntry.charAt(1) == '1') && (moveEntry.charAt(2) == '0')
+						&& ((moveEntry.charAt(0) == 'a') || (moveEntry.charAt(0) == (char) ('a' + gb.width - 3)))) {
+					this.number = 10;
+					this.character = moveEntry.charAt(0);
 				}
 				// x=4 aber num und/oder buch ungueltig
 				else {
@@ -258,10 +259,10 @@ public class Game {
 				}
 				// rich=d oder x="10ar", "a10r" oder x="10"buch(letzter Buchstabe)"l" ,
 				// buch(letzter Buchstabe)"10l"
-				if (zugeingabe.charAt(3) == 'd'
-						|| zugeingabe.charAt(3) == 'l' && this.buchstabe == (char) ('a' + gb.width - 3)
-						|| zugeingabe.charAt(3) == 'r' && this.buchstabe == 'a') {
-					this.richtung = zugeingabe.charAt(3);
+				if (moveEntry.charAt(3) == 'd'
+						|| moveEntry.charAt(3) == 'l' && this.character == (char) ('a' + gb.width - 3)
+						|| moveEntry.charAt(3) == 'r' && this.character == 'a') {
+					this.direction = moveEntry.charAt(3);
 					return true;
 				}
 				// Laenge x=4 aber rich ungueltig
@@ -277,43 +278,43 @@ public class Game {
 		} else {
 
 			// x=3
-			if (zugeingabe.length() == 3) {
+			if (moveEntry.length() == 3) {
 
 				// x = "1"buch rich oder num(letzte Nummer) buch rich
-				if (zugeingabe.charAt(0) == '1' || zugeingabe.charAt(0) == (char) ('1' + gb.height - 3)) {
-					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(0)));
-					this.buchstabe = zugeingabe.charAt(1);
+				if (moveEntry.charAt(0) == '1' || moveEntry.charAt(0) == (char) ('1' + gb.height - 3)) {
+					this.number = Integer.parseInt(("" + moveEntry.charAt(0)));
+					this.character = moveEntry.charAt(1);
 				}
 				// x = buch"1"rich oder buch num(letzte Nummer) rich
-				else if (zugeingabe.charAt(1) == '1' || zugeingabe.charAt(1) == (char) ('1' + gb.height - 3)) {
-					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(1)));
-					this.buchstabe = zugeingabe.charAt(0);
+				else if (moveEntry.charAt(1) == '1' || moveEntry.charAt(1) == (char) ('1' + gb.height - 3)) {
+					this.number = Integer.parseInt(("" + moveEntry.charAt(1)));
+					this.character = moveEntry.charAt(0);
 				}
 				// Laenge x = 3, num ungueltig
 				else {
 					return false;
 				}
 				// Laenge x = 3, num gueltig
-				this.richtung = zugeingabe.charAt(2);
+				this.direction = moveEntry.charAt(2);
 
 				// x = String mit "a" und "1" und entweder "r" oder "u"
-				if ((this.richtung == 'r' || this.richtung == 'u') && this.nummer == 1 && this.buchstabe == 'a') {
+				if ((this.direction == 'r' || this.direction == 'u') && this.number == 1 && this.character == 'a') {
 					return true;
 				}
 				// x = String mit dem letzter Buchstaben und "1" und entweder "u" oder "l"
-				else if ((this.richtung == 'u' || this.richtung == 'l') && this.nummer == 1
-						&& this.buchstabe == (char) ('a' + gb.width - 3)) {
+				else if ((this.direction == 'u' || this.direction == 'l') && this.number == 1
+						&& this.character == (char) ('a' + gb.width - 3)) {
 					return true;
 				}
 				// x = String mit dem letzter Buchstaben und der letzten Zahl und entweder "l"
 				// oder "d"
-				else if ((this.richtung == 'l' || this.richtung == 'd') && this.nummer == (1 + gb.height - 3)
-						&& this.buchstabe == (char) ('a' + gb.width - 3)) {
+				else if ((this.direction == 'l' || this.direction == 'd') && this.number == (1 + gb.height - 3)
+						&& this.character == (char) ('a' + gb.width - 3)) {
 					return true;
 				}
 				// x = String mit "a" und der letzten Zahl und entweder "d" oder "r"
-				else if ((this.richtung == 'd' || this.richtung == 'r') && this.nummer == (1 + gb.height - 3)
-						&& this.buchstabe == 'a') {
+				else if ((this.direction == 'd' || this.direction == 'r') && this.number == (1 + gb.height - 3)
+						&& this.character == 'a') {
 					return true;
 				}
 				// Laenge x = 3 aber rich und/oder buch ungueltig
@@ -325,43 +326,43 @@ public class Game {
 			else {
 
 				// x = num buch
-				if ((zugeingabe.charAt(0) >= '1' && zugeingabe.charAt(0) <= (char) ('1' + gb.height - 3))
-						&& (zugeingabe.charAt(1) >= 'a' && zugeingabe.charAt(1) <= (char) ('a' + gb.width - 3))) {
+				if ((moveEntry.charAt(0) >= '1' && moveEntry.charAt(0) <= (char) ('1' + gb.height - 3))
+						&& (moveEntry.charAt(1) >= 'a' && moveEntry.charAt(1) <= (char) ('a' + gb.width - 3))) {
 
-					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(0)));
-					this.buchstabe = zugeingabe.charAt(1);
+					this.number = Integer.parseInt(("" + moveEntry.charAt(0)));
+					this.character = moveEntry.charAt(1);
 				}
 				// x = buch num
-				else if ((zugeingabe.charAt(1) >= '1' && zugeingabe.charAt(1) <= (char) ('1' + gb.height - 3))
-						&& (zugeingabe.charAt(0) >= 'a' && zugeingabe.charAt(0) <= (char) ('a' + gb.width - 3))) {
+				else if ((moveEntry.charAt(1) >= '1' && moveEntry.charAt(1) <= (char) ('1' + gb.height - 3))
+						&& (moveEntry.charAt(0) >= 'a' && moveEntry.charAt(0) <= (char) ('a' + gb.width - 3))) {
 
-					this.nummer = Integer.parseInt(("" + zugeingabe.charAt(1)));
-					this.buchstabe = zugeingabe.charAt(0);
+					this.number = Integer.parseInt(("" + moveEntry.charAt(1)));
+					this.character = moveEntry.charAt(0);
 				}
 				// x = 2, num und/oder buch ungueltig
 				else {
 					return false;
 				}
 				// x = String mit "1" und NICHT "a" oder dem letzten Buchstaben
-				if (this.nummer == 1 && this.buchstabe != 'a' && this.buchstabe != (char) ('a' + gb.width - 3)) {
-					this.richtung = 'u';
+				if (this.number == 1 && this.character != 'a' && this.character != (char) ('a' + gb.width - 3)) {
+					this.direction = 'u';
 					return true;
 				}
 				// x = String mit der letzten Zahl und NICHT "a" oder dem letzten Buchstaben
-				else if (this.nummer == (1 + gb.height - 3) && this.buchstabe != 'a'
-						&& this.buchstabe != (char) ('a' + gb.width - 3)) {
-					this.richtung = 'd';
+				else if (this.number == (1 + gb.height - 3) && this.character != 'a'
+						&& this.character != (char) ('a' + gb.width - 3)) {
+					this.direction = 'd';
 					return true;
 				}
 				// x = String mit "a" und NICHT "1" oder der letzten Zahl
-				else if (this.buchstabe == 'a' && this.nummer != 1 && this.nummer != (1 + gb.height - 3)) {
-					this.richtung = 'r';
+				else if (this.character == 'a' && this.number != 1 && this.number != (1 + gb.height - 3)) {
+					this.direction = 'r';
 					return true;
 				}
 				// x = String mit dem letzten Buchstaben und NICHT "1" oder der letzten Zahl
-				else if (this.buchstabe == (char) ('a' + gb.width - 3) && this.nummer != 1
-						&& this.nummer != (1 + gb.height - 3)) {
-					this.richtung = 'l';
+				else if (this.character == (char) ('a' + gb.width - 3) && this.number != 1
+						&& this.number != (1 + gb.height - 3)) {
+					this.direction = 'l';
 					return true;
 				}
 				// x = 2, num zusammen mit buch ungueltig
@@ -379,51 +380,62 @@ public class Game {
 	 * @return ist gueltiger Platz?
 	 */
 	private boolean isValidSpace() {
-		int x = gb.height - (this.nummer + 1);
-		int y = this.buchstabe - 96;
+		int x = gb.height - (this.number + 1);
+		int y = this.character - 96;
 
-		if (this.richtung == 'u') {
-			for (int i = (gb.height - 2); i >= 1; i--) {
-				if (gb.board[i][y] == " ")
+		// bei Richtung hoch bzw. runter die gesamte Spalte testen, ob es noch einen
+		// freien Platz gibt
+		if (this.direction == 'u') {
+			for (int columnI = (gb.height - 2); columnI >= 1; columnI--) {
+				if (gb.board[columnI][y] == " ")
 					return true;
 			}
-		} else if (this.richtung == 'd') {
-			for (int i = x; i <= (gb.height - 2); i++) {
-				if (gb.board[i][y] == " ")
-					return true;
-			}
-		} else if (this.richtung == 'l') {
-			for (int i = (gb.width - 2); i >= 1; i--) {
-				if (gb.board[x][i] == " ")
-					return true;
-			}
-		} else if (this.richtung == 'r') {
-			for (int i = y; i <= (gb.width - 2); i++) {
-				if (gb.board[x][i] == " ")
+		} else if (this.direction == 'd') {
+			for (int columnII = x; columnII <= (gb.height - 2); columnII++) {
+				if (gb.board[columnII][y] == " ")
 					return true;
 			}
 		}
+		// bei Richtung links bzw. rechts die gesamte Zeile testen, ob es noch einen
+		// freien Platz gibt
+		else if (this.direction == 'l') {
+			for (int lineI = (gb.width - 2); lineI >= 1; lineI--) {
+				if (gb.board[x][lineI] == " ")
+					return true;
+			}
+		} else if (this.direction == 'r') {
+			for (int lineII = y; lineII <= (gb.width - 2); lineII++) {
+				if (gb.board[x][lineII] == " ")
+					return true;
+			}
+		}
+		// Wenn es keinen freien Platz mehr gibt
 		return false;
 	}
 
 //------------------------------------------------------------------------------------
+	/**
+	 * Prueft ob das Spiel noch laeuft
+	 * 
+	 * @return true (es laeuft noch) / false (es laeuft nicht mehr)
+	 */
 	public boolean isRunning() {
 		int x = 0;
 		int o = 0;
-		int j;
-		boolean spieler1 = false;
-		boolean spieler2 = false;
-//--------------------------------------------------------------------------------------------------------------------------------------------
-		// 4 waagerecht
-		int i = 1;
+		int line;
+		int column;
+		boolean player1 = false;
+		boolean player2 = false;
 
-		while ((i < this.gb.height) && (spieler1 == false || spieler2 == false)) {
-			j = 1;
-			while ((j < this.gb.width) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j].equals("X")) {
+		// Pruefen auf 4er-Ketten waagerecht "-"
+		column = 1;
+		while ((column < this.gb.height - 1) && (player1 == false || player2 == false)) {
+			line = 1;
+			while ((line < this.gb.width - 1) && (player1 == false || player2 == false)) {
+				if (this.gb.board[column][line].equals("X")) {
 					x++;
 					o = 0;
-				} else if (this.gb.board[i][j].equals("O")) {
+				} else if (this.gb.board[column][line].equals("O")) {
 					o++;
 					x = 0;
 				} else {
@@ -432,27 +444,26 @@ public class Game {
 				}
 				// hat x/o 4er-Kette?
 				if (x == 4) {
-					spieler1 = true;
-
+					player1 = true;
 				} else if (o == 4) {
-					spieler2 = true;
+					player2 = true;
 				}
-				j++;
+				line++;
 			}
 			x = 0;
 			o = 0;
-			i++;
+			column++;
 		}
 //----------------------------------------------------------------------------------------------------------------------------
-		// 4 senkrecht
-		i = 1;
-		while ((i < this.gb.width) && (spieler1 == false || spieler2 == false)) {
-			j = 1;
-			while ((j < this.gb.height) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[j][i].equals("X")) {
+		// Pruefen auf 4er-Ketten senkrecht "|"
+		line = 1;
+		while ((line < this.gb.width - 1) && (player1 == false || player2 == false)) {
+			column = 1;
+			while ((column < this.gb.height - 1) && (player1 == false || player2 == false)) {
+				if (this.gb.board[column][line].equals("X")) {
 					x++;
 					o = 0;
-				} else if (this.gb.board[j][i].equals("O")) {
+				} else if (this.gb.board[column][line].equals("O")) {
 					o++;
 					x = 0;
 				} else {
@@ -461,82 +472,89 @@ public class Game {
 				}
 				// hat x/o 4er-Kette?
 				if (x == 4) {
-					spieler1 = true;
+					player1 = true;
 				} else if (o == 4) {
-					spieler2 = true;
+					player2 = true;
 				}
-				j++;
+				column++;
 			}
 			x = 0;
 			o = 0;
-			i++;
+			line++;
 		}
 // ----------------------------------------------------------------------------------------------------------------------------
-		// 4 diagonal /
-		i = 4;
-		while ((i < this.gb.height) && (spieler1 == false || spieler2 == false)) {
-			j = 1;
-			while ((j < this.gb.width - 3) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j].equals("X") && this.gb.board[i - 1][j + 1].equals("X")
-						&& this.gb.board[i - 2][j + 2].equals("X") && this.gb.board[i - 3][j + 3].equals("X")) {
+		// Pruefen auf 4er-Ketten diagonal "/"
+		column = 4;
+		while ((column < this.gb.height - 1) && (player1 == false || player2 == false)) {
+			line = 1;
+			while ((line < this.gb.width - 4) && (player1 == false || player2 == false)) {
+				if (this.gb.board[column][line].equals("X") && this.gb.board[column - 1][line + 1].equals("X")
+						&& this.gb.board[column - 2][line + 2].equals("X")
+						&& this.gb.board[column - 3][line + 3].equals("X")) {
 
-					spieler1 = true;
+					player1 = true;
 
-				} else if (this.gb.board[i][j].equals("O") && this.gb.board[i - 1][j + 1].equals("O")
-						&& this.gb.board[i - 2][j + 2].equals("O") && this.gb.board[i - 3][j + 3].equals("O")) {
+				} else if (this.gb.board[column][line].equals("O") && this.gb.board[column - 1][line + 1].equals("O")
+						&& this.gb.board[column - 2][line + 2].equals("O")
+						&& this.gb.board[column - 3][line + 3].equals("O")) {
 
-					spieler2 = true;
+					player2 = true;
 				}
-				j++;
+				line++;
 			}
-			i++;
+			column++;
 		}
 // ----------------------------------------------------------------------------------------------------------------------------
-		// 4 diagonal \
-		i = 1;
-		while ((i < this.gb.height - 3) && (spieler1 == false || spieler2 == false)) {
-			j = 1;
-			while ((j < this.gb.width - 3) && (spieler1 == false || spieler2 == false)) {
-				if (this.gb.board[i][j].equals("X") && this.gb.board[i + 1][j + 1].equals("X")
-						&& this.gb.board[i + 2][j + 2].equals("X") && this.gb.board[i + 3][j + 3].equals("X")) {
+		// Pruefen auf 4er-Ketten diagonal "\"
+		column = 1;
+		while ((column < this.gb.height - 4) && (player1 == false || player2 == false)) {
+			line = 1;
+			while ((line < this.gb.width - 4) && (player1 == false || player2 == false)) {
+				if (this.gb.board[column][line].equals("X") && this.gb.board[column + 1][line + 1].equals("X")
+						&& this.gb.board[column + 2][line + 2].equals("X")
+						&& this.gb.board[column + 3][line + 3].equals("X")) {
 
-					spieler1 = true;
+					player1 = true;
 
-				} else if (this.gb.board[i][j].equals("O") && this.gb.board[i + 1][j + 1].equals("O")
-						&& this.gb.board[i + 2][j + 2].equals("O") && this.gb.board[i + 3][j + 3].equals("O")) {
+				} else if (this.gb.board[column][line].equals("O") && this.gb.board[column + 1][line + 1].equals("O")
+						&& this.gb.board[column + 2][line + 2].equals("O")
+						&& this.gb.board[column + 3][line + 3].equals("O")) {
 
-					spieler2 = true;
+					player2 = true;
 				}
-				j++;
+				line++;
 			}
-			i++;
+			column++;
 		}
-//--------------------------------------------------------------------------------------------------------------------------------
-		if (spieler1 == true && spieler2 == true) {
+//-------------------------------------------------------------------------------------------------------------------------------------
+		// Wenn beide Spieler eine 4er-Kette haben gewinnt der Ziehende
+		if (player1 == true && player2 == true) {
 			if (this.turn % 2 == 0) {
 				this.winner = false;
 			} else {
 				this.winner = true;
 			}
 			return false;
-
-		} else if (spieler1 == true || spieler2 == true) {
-			this.winner = spieler1; // true == Spieler 1, false == Spieler 2
+		}
+		// Wenn genau ein Spieler eine 4er-Kette hat, gewinnt dieser
+		else if (player1 == true || player2 == true) {
+			this.winner = player1; // true == Spieler 1, false == Spieler 2
 			return false;
-		} else
-			return true;
+		}
+		return true;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	/**
+	 * Gibt den Gewinner zurueck, wenn das Spiel schon vorbei ist
 	 * 
-	 * @return
+	 * @return true (fuer Spieler 1) / false (fuer Spieler 2)
 	 */
 	public boolean whoWon() {
 		if (this.isRunning() == false) {
 			return this.winner;
 		} else {
-			throw new GameException("Das Spiel läuft noch!");
+			throw new GameException("Das Spiel laeuft noch!");
 		}
 	}
 }
