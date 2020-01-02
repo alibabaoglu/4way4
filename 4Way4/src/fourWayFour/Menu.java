@@ -88,7 +88,7 @@ public class Menu {
 						if (!validMove)
 							OutputCollection.outputWithNewLine("Ungueltiger Zug");
 
-						OutputCollection.outputWithNewLine(zweiter + "ist am Zug:");
+						OutputCollection.outputWithNewLine(zweiter + " ist am Zug:");
 						if (!zweiter.equals("KI")) {
 							move = sc.next();
 							validMove = engine.isVaildMove(move);
