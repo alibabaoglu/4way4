@@ -21,11 +21,15 @@ public class GameEngine implements Requirements {
 	 */
 	public GameEngine(int height, int width, int mode, String... beginner) {
 		GameBoard gb = GameBoard.createBoard(height, width);
+		this.gb = gb;
 		game = new Game(gb);
 		this.mode = mode;
 		if (mode == 1) {
-			this.com = new KI(1, gb);
 			this.beginner = beginner[0];
+			if (this.beginner.equals("KI"))
+				this.com = new KI(3, gb, "X");
+			else
+				this.com = new KI(3, gb, "O");
 		}
 	}
 
@@ -42,10 +46,11 @@ public class GameEngine implements Requirements {
 			} else {
 				game.setStone("O", input);
 			}
+
 		} else if (mode == 1) {
 			if (beginner.equals("KI")) {
 				if (counter % 2 == 0) {
-					game.setStone("X", com.move());
+					game.setStone("X", com.move(gb));
 				} else
 					game.setStone("O", input);
 
@@ -53,7 +58,7 @@ public class GameEngine implements Requirements {
 				if (counter % 2 == 0) {
 					game.setStone("X", input);
 				} else
-					game.setStone("O", com.move());
+					game.setStone("O", com.move(gb));
 			}
 		}
 		counter++;

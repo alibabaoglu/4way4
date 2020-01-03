@@ -64,8 +64,10 @@ public class Menu {
 				erster = "Spieler-1";
 				zweiter = "Spieler-2";
 			}
+			
+			
 			engine = new GameEngine(row, col, modus, erster);
-
+			
 			while (engine.isRunning()) {
 
 				do {
@@ -82,13 +84,13 @@ public class Menu {
 				} while (!validMove);
 
 				engine.myMove(move);
-
+				engine.printBoard();
 				if (engine.isRunning()) {
 					do {
 						if (!validMove)
 							OutputCollection.outputWithNewLine("Ungueltiger Zug");
 
-						OutputCollection.outputWithNewLine(zweiter + " ist am Zug:");
+						OutputCollection.outputWithNewLine(zweiter + "ist am Zug:");
 						if (!zweiter.equals("KI")) {
 							move = sc.next();
 							validMove = engine.isVaildMove(move);
@@ -97,13 +99,14 @@ public class Menu {
 
 					} while (!(validMove = engine.isVaildMove(move)));
 					engine.myMove(move);
+					engine.printBoard();
 				}
 			}
 			if (!engine.isRunning()) {
 				if (engine.whoWon())
-					OutputCollection.outputWithNewLine(erster+" hat gewonnen");
+					OutputCollection.outputWithNewLine(erster + " hat gewonnen");
 				else
-					OutputCollection.outputWithNewLine(zweiter+" hat gewonnen");
+					OutputCollection.outputWithNewLine(zweiter + " hat gewonnen");
 			}
 
 			OutputCollection.outputWithNewLine(
