@@ -92,5 +92,22 @@ public class GameBoard {
 			OutputCollection.outputWithNewLine();
 		}
 		OutputCollection.outputWithNewLine(frame);
+		OutputCollection.outputWithNewLine();
+	}
+
+	/**
+	 * Clont das GameBoard
+	 * 
+	 * @return gibt ein neues GameBoard mit den selben Werten zurueck
+	 */
+	public GameBoard cloneBoard() {
+		GameBoard clone = GameBoard.createBoard(this.height - 2, this.width - 2);
+
+		for (int i = 0; i < this.height; i++) {
+			for (int j = 1; j < this.width; j++) {
+				clone.board[i][j] = this.board[i][j];
+			}
+		}
+		return clone;
 	}
 }
