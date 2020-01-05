@@ -5,31 +5,60 @@ package fourWayFour;
  *
  */
 public class GameEngine implements Requirements {
+
+	final static int COMPUTER = 1;
+	final static int PLAYER = 2;
+
 	private GameBoard gb;
 	private Game game;
 	private KI com;
-	private int counter, mode;
+	private int counter = 0;
+	private int mode;
 	private String beginner;
 
+	// TODO Konstruktor KI von außen
+
 	/**
-	 * Setzt den Stein (X/O) auf das Spielbrett
+	 * Konstruktor fuer Spieler-Spieler
 	 * 
 	 * @param height
 	 * @param width
 	 * @param mode
+	 */
+	public GameEngine(int height, int width, int mode) {
+		if (mode == PLAYER) {
+			this.gb = GameBoard.createBoard(height, width);
+			this.game = new Game(this.gb);
+			this.mode = mode;
+		} else {
+			throw new GameException("Ungueltige Parameter");
+		}
+	}
+
+	/**
+	 * Konstruktor fuer Spieler-KI
+	 * 
+	 * @param height
+	 * @param width
+	 * @param mode
+	 * @param difficulty
 	 * @param beginner
 	 */
-	public GameEngine(int height, int width, int mode, String... beginner) {
-		GameBoard gb = GameBoard.createBoard(height, width);
-		this.gb = gb;
-		game = new Game(gb);
-		this.mode = mode;
-		if (mode == 1) {
-			this.beginner = beginner[0];
-			if (this.beginner.equals("KI"))
-				this.com = new KI(3, gb, "X");
-			else
-				this.com = new KI(3, gb, "O");
+	public GameEngine(int height, int width, int mode, int difficulty, String beginner) {
+		if (mode == COMPUTER && difficulty >= 1 && difficulty <= 3) {
+			this.gb = GameBoard.createBoard(height, width);
+			if (beginner.equals("KI")) {
+				this.com = new KI(difficulty, this.gb, "X");
+			} else if (beginner.equals("Spieler")) {
+				this.com = new KI(difficulty, this.gb, "O");
+			} else {
+				throw new GameException("Ungueltige Parameter");
+			}
+			this.game = new Game(this.gb);
+			this.mode = mode;
+			this.beginner = beginner;
+		} else {
+			throw new GameException("Ungueltige Parameter");
 		}
 	}
 
@@ -40,28 +69,26 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public void myMove(String input) {
-		if (mode == 2) {
-			if (counter % 2 == 0) {
-				game.setStone("X", input);
+		this.counter++;
+		if (this.mode == PLAYER) {
+			if (this.counter % 2 != 0) {
+				this.game.setStone("X", input);
 			} else {
-				game.setStone("O", input);
+				this.game.setStone("O", input);
 			}
-
-		} else if (mode == 1) {
-			if (beginner.equals("KI")) {
-				if (counter % 2 == 0) {
-					game.setStone("X", com.move(gb));
+		} else if (this.mode == COMPUTER) {
+			if (this.beginner.equals("KI")) {
+				if (this.counter % 2 != 0) {
+					this.game.setStone("X", this.com.move());
 				} else
-					game.setStone("O", input);
-
+					this.game.setStone("O", input);
 			} else {
-				if (counter % 2 == 0) {
-					game.setStone("X", input);
+				if (this.counter % 2 != 0) {
+					this.game.setStone("X", input);
 				} else
-					game.setStone("O", com.move(gb));
+					this.game.setStone("O", this.com.move());
 			}
 		}
-		counter++;
 	}
 
 	/**
@@ -71,7 +98,7 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public String yourMove() {
-		return game.lastTurn;
+		return this.game.lastTurn;
 	}
 
 	/**
@@ -81,7 +108,7 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public boolean isRunning() {
-		return game.isRunning();
+		return this.game.isRunning();
 	}
 
 	/**
@@ -91,7 +118,7 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public boolean whoWon() {
-		return game.whoWon();
+		return this.game.whoWon();
 	}
 
 	/**
@@ -99,7 +126,7 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public void printBoard() {
-		gb.printBoard();
+		this.gb.printBoard();
 	}
 
 	/**
@@ -111,6 +138,6 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public boolean isVaildMove(String input) {
-		return game.isValid(input) == true;
+		return this.game.isValid(input) == true;
 	}
 }
