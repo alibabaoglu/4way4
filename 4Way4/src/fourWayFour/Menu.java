@@ -99,12 +99,12 @@ public class Menu {
 						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + difficulty);
 					}
 				} while (!validInput);
-				engine = new GameEngine(row, col, mode, first);// TODO
+				engine = new GameEngine(row, col, mode, difficulty, first);// TODO
 			}
 
 //			// Wenn Spieler-Spieler erstellen des Spiels
 			else {
-				engine = new GameEngine(row, col, mode, first);// TODO
+				engine = new GameEngine(row, col, mode);// TODO
 			}
 
 //			// Der Spielablauf
@@ -125,7 +125,7 @@ public class Menu {
 					if (mode == COMPUTER) {
 						if ((starter == COMPUTER && counter % 2 != 0) || (starter == PLAYER && counter % 2 == 0)) {
 							move = "";
-							//OutputCollection.outputWithNewLine("Zugeingabe:\n");// TODO
+							// OutputCollection.outputWithNewLine("Zugeingabe:\n");// TODO
 						} else {
 							OutputCollection.outputWithNewLine("Zugeingabe:");
 							move = sc.next();
@@ -138,7 +138,7 @@ public class Menu {
 					validInput = engine.isVaildMove(move);
 					if (!validInput && !(mode == COMPUTER && ((starter == COMPUTER && counter % 2 != 0)
 							|| (starter == PLAYER && counter % 2 == 0)))) {
-						OutputCollection.outputWithNewLine("Ungueltige Eingabe:" + move);
+						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + move);
 					}
 
 				} while (!validInput && !(mode == COMPUTER
