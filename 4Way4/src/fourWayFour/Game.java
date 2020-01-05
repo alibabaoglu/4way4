@@ -1,7 +1,6 @@
 package fourWayFour;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Ein Spielzug
@@ -13,7 +12,6 @@ public class Game {
 	private boolean winner; // true == Spieler 1, false == Spieler 2
 	private int turn = 0;
 	protected String lastTurn = "noch kein Zug vorhanden";
-	private GameBoard boardBeforeShift;
 
 	/**
 	 * Konstruktor des Spielzugs
@@ -33,10 +31,9 @@ public class Game {
 	 * @param entry  Eingabestring
 	 */
 	public void setStone(String symbol, String entry) {
-		this.boardBeforeShift = cloneBoard();
 		boolean occupied = false;
 
-		if (!(hasOWon() || hasXWon())) {
+		
 
 			if (this.isValid(entry) == true) {
 
@@ -58,7 +55,7 @@ public class Game {
 			} else {
 				System.out.println("Ungültiger Zug " + entry);
 			}
-		}
+		
 
 	}
 
@@ -86,6 +83,7 @@ public class Game {
 
 	}
 
+//-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Ueberprueft ob der Zaehler einer Schleife noch im Gueltigkeitsbereich liegt
 	 * 
@@ -102,6 +100,7 @@ public class Game {
 
 	}
 
+//-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Bestimmt wie oft die aeussere Schleife (for-schleife) laufen soll
 	 * 
@@ -114,13 +113,14 @@ public class Game {
 			return this.gb.board.length - 1;
 	}
 
+//-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Verschiebt alle Steine in die angegebene Richtung bekommt als Parameter die
 	 * Koordinaten
 	 * 
 	 * @param symbol   (X/O)
-	 * @param          x-Wert
-	 * @param          y-Wert
+	 * @param x-Wert
+	 * @param y-Wert
 	 * @param occupied
 	 */
 
@@ -464,7 +464,7 @@ public class Game {
 			o = 0;
 			column++;
 		}
-//----------------------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------------------------------
 		// Pruefen auf 4er-Ketten senkrecht "|"
 		line = 1;
 		while ((line < this.gb.width - 1) && (player1 == false || player2 == false)) {
@@ -492,7 +492,7 @@ public class Game {
 			o = 0;
 			line++;
 		}
-// ----------------------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------------------------------
 		// Pruefen auf 4er-Ketten diagonal "/"
 		column = 4;
 		while ((column < this.gb.height - 1) && (player1 == false || player2 == false)) {
@@ -514,7 +514,7 @@ public class Game {
 			}
 			column++;
 		}
-// ----------------------------------------------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------------------------------
 		// Pruefen auf 4er-Ketten diagonal "\"
 		column = 1;
 		while ((column < this.gb.height - 4) && (player1 == false || player2 == false)) {
@@ -536,7 +536,7 @@ public class Game {
 			}
 			column++;
 		}
-//-------------------------------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------------------------------------
 		// Wenn beide Spieler eine 4er-Kette haben gewinnt der Ziehende
 		if (player1 == true && player2 == true) {
 			if (this.turn % 2 == 0) {
@@ -551,126 +551,20 @@ public class Game {
 			this.winner = player1; // true == Spieler 1, false == Spieler 2
 			return false;
 		}
+		// Wenn keiner der beiden Spieler eine 4er-Kette haben gewinnt der Letzte der
+		// ziehen konnte
+		else if (player1 == false && player2 == false && this.turn == (gb.height * gb.width)) {
+			if (this.turn % 2 == 0) {
+				this.winner = false;
+			} else {
+				this.winner = true;
+			}
+			return false;
+		}
 		return true;
 	}
 
-	/**
-	 * Bewertet param. board und gibt score zürück.
-	 * 
-	 * @param board
-	 * @param kiToken
-	 * @return score
-	 */
-	public int scoreBoard(GameBoard board, String kiToken) {
-		int line;
-		int column;
-		int score = 0;
-		String playerToken;
-		if (kiToken.equals("X"))
-			playerToken = "O";
-		else
-			playerToken = "X";
-
-		// Pruefen waagerecht "-"
-		column = 1;
-		while (column < this.gb.height - 1) {
-			line = 1;
-			while (line < this.gb.width - 1) {
-
-				if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column][(line + 1)].equals(kiToken)
-						&& this.gb.board[column][line + 2].equals(kiToken)
-						&& (!this.gb.board[column][line + 3].equals(playerToken)
-								|| !this.gb.board[column][line - 1].equals(playerToken)
-										&& !this.gb.board[column][line - 1].equals(kiToken))) {
-					line += 2;
-					score += 5;
-
-				} else if (this.gb.board[column][line].equals(kiToken)
-						&& this.gb.board[column][line + 1].equals(kiToken)
-						&& (this.gb.board[column][line + 2].equals(" ")
-								|| !this.gb.board[column][line - 1].equals(playerToken)
-										&& !this.gb.board[column][line - 1].equals(kiToken))) {
-					line += 1;
-					score += 2;
-				}
-				if (this.gb.board[column][line].equals(playerToken)
-						&& this.gb.board[column][line + 1].equals(playerToken)
-						&& this.gb.board[column][line + 2].equals(playerToken)
-						&& (!this.gb.board[column][line + 3].equals(kiToken)
-								|| !this.gb.board[column][line - 1].equals(kiToken)
-										&& !this.gb.board[column][line - 1].equals(playerToken))) {
-					line += 2;
-					score -= 100;
-
-				} else if (this.gb.board[column][line].equals(playerToken)
-						&& this.gb.board[column][line + 1].equals(playerToken)
-						&& (this.gb.board[column][line + 2].equals(" ")
-								|| !this.gb.board[column][line - 1].equals(kiToken)
-										&& !this.gb.board[column][line - 1].equals(playerToken))) {
-					line += 1;
-					score -= 1;
-				}
-
-				line++;
-			}
-
-			column++;
-		}
-
-		// ----------------------------------------------------------------------------------------------------------------------------
-		// Pruefen senkrecht "|"
-		line = 1;
-		while (line < this.gb.width - 1)
-
-		{
-			column = 1;
-			while (column < this.gb.height - 1) {
-
-				if (this.gb.board[column][line].equals(kiToken) && this.gb.board[(column + 1)][(line)].equals(kiToken)
-						&& this.gb.board[(column + 2)][line].equals(kiToken)
-						&& (!this.gb.board[column + 3][line].equals(playerToken)
-								|| !this.gb.board[column - 1][line].equals(playerToken)
-										&& !this.gb.board[column - 1][line].equals(kiToken))) {
-					column += 2;
-					score += 5;
-
-				} else if (this.gb.board[column][line].equals(kiToken)
-						&& this.gb.board[column + 1][line].equals(kiToken)
-						&& (this.gb.board[column + 2][line].equals(" ")
-								|| !this.gb.board[column - 1][line].equals(playerToken)
-										&& !this.gb.board[column - 1][line].equals(kiToken))) {
-					column += 1;
-					score += 2;
-				}
-
-				if (this.gb.board[column][line].equals(playerToken)
-						&& this.gb.board[column + 1][line].equals(playerToken)
-						&& this.gb.board[column + 2][line].equals(playerToken)
-						&& (!this.gb.board[column + 3][line].equals(kiToken)
-								|| !this.gb.board[column - 1][line].equals(kiToken)
-										&& !this.gb.board[column - 1][line].equals(playerToken))) {
-					column += 2;
-					score -= 100;
-				} else if (this.gb.board[column][line].equals(playerToken)
-						&& this.gb.board[column + 1][line].equals(playerToken)
-						&& (this.gb.board[column + 2][line].equals(" ")
-								|| !this.gb.board[column - 1][line].equals(kiToken)
-										&& !this.gb.board[column - 1][line].equals(playerToken))) {
-					column += 1;
-					score -= 1;
-
-				}
-
-				column++;
-			}
-			line++;
-		}
-
-		return score;
-
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Gibt den Gewinner zurueck, wenn das Spiel schon vorbei ist
 	 * 
@@ -684,32 +578,150 @@ public class Game {
 		}
 	}
 
-	public void print() {
-		this.gb.printBoard();
-	}
+//-------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Bewertet param. board und gibt score zürück.
+	 * 
+	 * @param board
+	 * @param kiToken
+	 * @return score
+	 */
+	public int scoreBoard(GameBoard board, String kiToken) {
 
-	public void undo_move() {
-		this.gb = boardBeforeShift;
-	}
+		int line;
+		int column;
+		int score = 0;
+		String playerToken;
 
-	public GameBoard cloneBoard() {
-		GameBoard tmp = GameBoard.createBoard(gb.height - 2, gb.width - 2);
+		if (kiToken.equals("X"))
+			playerToken = "O";
+		else
+			playerToken = "X";
 
-		for (int i = 0; i < gb.height; i++) {
-			for (int j = 1; j < gb.width; j++) {
-				tmp.board[i][j] = gb.board[i][j];
+		// Pruefen waagerecht "-"
+		column = 1;
+		while (column < this.gb.height - 1) {
+
+			
+			line = 1;
+
+			while (line < this.gb.width - 1) {
+
+				// KI
+				// "...XXX(!O)"||"(!X&&!O)XXX..."
+				if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column][line + 1].equals(kiToken)
+						&& this.gb.board[column][line + 2].equals(kiToken)
+						&& (!this.gb.board[column][line + 3].equals(playerToken)
+								|| !this.gb.board[column][line - 1].equals(playerToken)
+										&& !this.gb.board[column][line - 1].equals(kiToken))) {
+					line += 2;
+					score += 5;
+				}
+				// "...XX "||"(!X&&!O)XX..."
+				else if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column][line + 1].equals(kiToken)
+						&& (this.gb.board[column][line + 2].equals(" ")
+								|| !this.gb.board[column][line - 1].equals(playerToken)
+										&& !this.gb.board[column][line - 1].equals(kiToken))) {
+					line += 1;
+					score += 2;
+				}
+				// Gegner
+				// "...OOO(!X)"||"(!X&&!O)OOO..."
+				if (this.gb.board[column][line].equals(playerToken)
+						&& this.gb.board[column][line + 1].equals(playerToken)
+						&& this.gb.board[column][line + 2].equals(playerToken)
+						&& (!this.gb.board[column][line + 3].equals(kiToken)
+								|| !this.gb.board[column][line - 1].equals(kiToken)
+										&& !this.gb.board[column][line - 1].equals(playerToken))) {
+					line += 2;
+					score -= 100;
+				}
+				// "...OO "||"(!X&&!O)OO..."
+				else if (this.gb.board[column][line].equals(playerToken)
+						&& this.gb.board[column][line + 1].equals(playerToken)
+						&& (this.gb.board[column][line + 2].equals(" ")
+								|| !this.gb.board[column][line - 1].equals(kiToken)
+										&& !this.gb.board[column][line - 1].equals(playerToken))) {
+					line += 1;
+					score -= 1;
+				}
+				line++;
 			}
+			column++;
 		}
 
-		return tmp;
+		// ----------------------------------------------------------------------------------------------------------------------------
+		// Pruefen senkrecht "|"
+		line = 1;
+		while (line < this.gb.width - 1)
+
+		{
+			column = 1;
+			while (column < this.gb.height - 1) {
+
+				// KI
+				//   ... ||"(!X&&!O)"
+				//   "X" || "X"
+				//   "X" || "X"
+				//   "X" || "X"
+				// "(!O)"|| ...
+				if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column + 1][line].equals(kiToken)
+						&& this.gb.board[column + 2][line].equals(kiToken)
+						&& (!this.gb.board[column + 3][line].equals(playerToken)
+								|| !this.gb.board[column - 1][line].equals(playerToken)
+										&& !this.gb.board[column - 1][line].equals(kiToken))) {
+					column += 2;
+					score += 5;
+				}
+				// ""||""
+				// ""||""
+				// ""||""
+				else if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column + 1][line].equals(kiToken)
+						&& (this.gb.board[column + 2][line].equals(" ")
+								|| !this.gb.board[column - 1][line].equals(playerToken)
+										&& !this.gb.board[column - 1][line].equals(kiToken))) {
+					column += 1;
+					score += 2;
+				}
+				// Gegner
+				// ""||""
+				// ""||""
+				// ""||""
+				// ""||""
+				if (this.gb.board[column][line].equals(playerToken)
+						&& this.gb.board[column + 1][line].equals(playerToken)
+						&& this.gb.board[column + 2][line].equals(playerToken)
+						&& (!this.gb.board[column + 3][line].equals(kiToken)
+								|| !this.gb.board[column - 1][line].equals(kiToken)
+										&& !this.gb.board[column - 1][line].equals(playerToken))) {
+					column += 2;
+					score -= 100;
+				}
+				// ""||""
+				// ""||""
+				// ""||""
+				else if (this.gb.board[column][line].equals(playerToken)
+						&& this.gb.board[column + 1][line].equals(playerToken)
+						&& (this.gb.board[column + 2][line].equals(" ")
+								|| !this.gb.board[column - 1][line].equals(kiToken)
+										&& !this.gb.board[column - 1][line].equals(playerToken))) {
+					column += 1;
+					score -= 1;
+				}
+				column++;
+			}
+			line++;
+		}
+		return score;
 	}
 
+//-------------------------------------------------------------------------------------------------------------------------------------------
 	/**
 	 * 
 	 * @param gb
 	 * @return liste mit allen gültigen Zügen
 	 */
-	public ArrayList<String> get_valid_locations(GameBoard gb) {
+	protected ArrayList<String> get_valid_locations(GameBoard gb) {
 		ArrayList<String> fields = new ArrayList<>();
 
 		fields.add("1ar");
@@ -747,21 +759,16 @@ public class Game {
 		return validMoves;
 	}
 
-	public boolean hasXWon() {
+//-------------------------------------------------------------------------------------------------------------------------------------------
+	protected boolean symbolWon(String symbol) {
 		if (this.isRunning() == false) {
-			if (winner)
+			if (this.winner == true && symbol.equals("X") || this.winner == false && symbol.equals("O")) {
 				return true;
+			} else {
+				return false;
+			}
+
 		}
 		return false;
-
-	}
-
-	public boolean hasOWon() {
-		if (this.isRunning() == false) {
-			if (!winner)
-				return true;
-		}
-		return false;
-
 	}
 }
