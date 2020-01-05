@@ -1,60 +1,54 @@
 package fourWayFour;
 
-
 import java.util.List;
 
 public class KI {
-	private boolean hard, medium, easy;
+
+	final static int EASY = 1;
+	final static int MEDIUM = 2;
+	final static int HARD = 3;
+
+	private static int counter = 0;
+
 	private GameBoard board;
+	private String computersMove;
+	private String kiToken, playerToken;
+	private int difficulty;
 
-
-	private String  kiToken, playerToken;
-
-	public KI(int schwierigkeit, GameBoard gb, String token) {
-		this.kiToken = token;
-
+	public KI(int schwierigkeit, GameBoard gb, String kiToken) {
+		this.kiToken = kiToken;
+		this.board = gb;
+		this.difficulty = schwierigkeit;
 		if (kiToken.equals("X"))
 			this.playerToken = "O";
 		else
 			this.playerToken = "X";
-
-		this.board = gb;
-		switch (schwierigkeit) {
-		case 1:
-			this.easy = true;
-			break;
-		case 2:
-			this.medium = true;
-			break;
-		case 3:
-			this.hard = true;
-			break;
-		}
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * 
+	 * @return
+	 */
 	public String move() {
+		if (this.difficulty == EASY)
+			return this.easyMove();
 
-		return easyMove();
+		else if (this.difficulty == MEDIUM)
+			return this.mediumMove();
+
+		else if (this.difficulty == HARD)
+			return this.hardMove();
+
+		else
+			throw new GameException("Kein Schwierigkeitsgrad");
 	}
 
-	public String move(GameBoard gb) {
-	
-
-		return hardMove(gb);
-	}
-
-	private GameBoard cloneGameBoard(GameBoard gb) {
-		GameBoard tmp = GameBoard.createBoard(gb.height - 2, gb.width - 2);
-
-		for (int i = 0; i < gb.height; i++) {
-			for (int j = 1; j < gb.width; j++) {
-				tmp.board[i][j] = gb.board[i][j];
-			}
-		}
-
-		return tmp;
-	}
-
+//----------------------------------------------------------------------------------
+	/**
+	 * 
+	 * @return
+	 */
 	private String easyMove() {
 		// In welche Richtung soll eingeworfen werden?
 		boolean ecke = false;
@@ -63,35 +57,35 @@ public class KI {
 		int rnd = (int) (Math.random() * 4 + 1);
 		// Unten
 		if (rnd == 1) {
-			spalte = (int) (Math.random() * (board.width - 2) + 1);
-			zeile = board.height - 2;
-			if (spalte == 1 || spalte == board.width - 2)
+			spalte = (int) (Math.random() * (this.board.width - 2) + 1);
+			zeile = this.board.height - 2;
+			if (spalte == 1 || spalte == this.board.width - 2)
 				ecke = true;
 			richtung = "d";
 		}
 
 		// oben
 		if (rnd == 2) {
-			spalte = (int) (Math.random() * (board.width - 2) + 1);
+			spalte = (int) (Math.random() * (this.board.width - 2) + 1);
 			zeile = 1;
-			if (spalte == 1 || spalte == board.width - 2)
+			if (spalte == 1 || spalte == this.board.width - 2)
 				ecke = true;
 			richtung = "u";
 
 		}
 		// links
 		if (rnd == 3) {
-			spalte = board.width - 2;
-			zeile = (int) (Math.random() * (board.height - 2) + 1);
-			if (zeile == 1 || zeile == board.height - 2)
+			spalte = this.board.width - 2;
+			zeile = (int) (Math.random() * (this.board.height - 2) + 1);
+			if (zeile == 1 || zeile == this.board.height - 2)
 				ecke = true;
 			richtung = "l";
 		}
 		// rechts
 		if (rnd == 4) {
 			spalte = 1;
-			zeile = (int) (Math.random() * (board.height - 2) + 1);
-			if (zeile == 1 || zeile == board.height - 2)
+			zeile = (int) (Math.random() * (this.board.height - 2) + 1);
+			if (zeile == 1 || zeile == this.board.height - 2)
 				ecke = true;
 			richtung = "r";
 		}
@@ -106,15 +100,34 @@ public class KI {
 
 	}
 
-	private String hardMove(GameBoard gb) {
-
-		System.out.println(minimax(cloneGameBoard(gb), 2, 1));
-		return computersMove;
+//----------------------------------------------------------------------------------------
+	/**
+	 * 
+	 * @return
+	 */
+	private String mediumMove() {
+		KI.counter++;
+		if (KI.counter % 3 != 0) {
+			return this.hardMove();
+		} else {
+			return this.easyMove();
+		}
 	}
 
-	public String computersMove;
+//---------------------------------------------------------------------------------------
+	/**
+	 * 
+	 * @param gb
+	 * @return
+	 */
+	private String hardMove() {
 
-	/*
+		minimax(this.board.cloneBoard(), 2, 1);
+		return this.computersMove;
+	}
+
+//------------------------------------------------------------------------------------------
+	/**
 	 * Rekursive Funkton welches einen Baum simuliert. Baum kann bis zu 28^depth
 	 * Spielstände enthalten. Die Funktion bewertet die Spielstände. Der Spielstand
 	 * mit der besten bewertung wird nachkonstruiert.
@@ -127,7 +140,7 @@ public class KI {
 	 * 
 	 * @return score
 	 */
-	public int minimax(GameBoard gb, int depth, int turn) {
+	private int minimax(GameBoard gb, int depth, int turn) {
 
 		Game spiel = new Game(gb);
 		List<String> valid_locations = spiel.get_valid_locations(gb);// Speichere alle gültigen Züge.
@@ -136,18 +149,10 @@ public class KI {
 		// Tiefe 0 ist dann wird der jeweilige Spielstand bewertet.
 		if (depth == 0 || !spiel.isRunning()) {
 			if (!spiel.isRunning()) {
-				if (spiel.hasXWon()) {
-					if (kiToken.equals("X"))
-						return +1000000000;
-					else
-						return -1000000000;
-				} else if (spiel.hasOWon()) {
-					if (kiToken.equals("O"))
-						return +1000000000;
-					else
-						return -1000000000;
-				} else
-					return 0; // Spiel ist vorbei, keine gültigen Züge mehr
+				if (spiel.symbolWon(kiToken))
+					return +1000000000;
+				else if (spiel.symbolWon(playerToken))
+					return -1000000000;
 			} else if (depth == 0)
 				return spiel.scoreBoard(gb, kiToken);
 		}
@@ -159,9 +164,9 @@ public class KI {
 		for (int i = 0; i < valid_locations.size(); i++) {
 
 			String point = valid_locations.get((i));
-			var new_board = cloneGameBoard(gb);
+			var new_board = gb.cloneBoard();
 			Game g = new Game(new_board);
-			//Maximierender Spieler
+			// Maximierender Spieler
 			if (turn == 1) {
 				g.setStone(kiToken, point);
 				int currentScore = minimax(new_board, depth - 1, 2); // Rekur. Aufruf gibt Score zurück
@@ -170,16 +175,14 @@ public class KI {
 				if (currentScore > max) {
 					max = currentScore;
 					computersMove = point;
-					if (depth == 3)
-						System.out.println("Score for position " + computersMove + " = " + currentScore);
 				}
-			//Minimierender Spieler
-			} else {
+			}
+			// Minimierender Spieler
+			else {
 				g.setStone(playerToken, point);
 				int currentScore = minimax(new_board, depth - 1, 1);
 				if (currentScore < min)
 					min = currentScore;
-
 			}
 		}
 		return turn == 1 ? max : min;
