@@ -33,7 +33,7 @@ public class Menu {
 				if (mode == COMPUTER || mode == PLAYER)
 					validInput = true;
 				else
-					OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + mode);
+					OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + mode + "\n");
 			} while (!validInput);
 
 //			// Auswahl der Hoehe des Spielbretts
@@ -42,7 +42,7 @@ public class Menu {
 						"Geben Sie die Spaltenlaenge fuer das Spielbrett zwischen \"7\" und \"10\" ein.");
 				col = sc.nextInt();
 				if (col < 7 || col > 10) {
-					OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + col);
+					OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + col + "\n");
 					validInput = false;
 				} else
 					validInput = true;
@@ -54,7 +54,7 @@ public class Menu {
 						"Geben Sie die Zeilenlaenge fuer das Spielbrett zwischen \"7\" und \"10\" ein.");
 				row = sc.nextInt();
 				if (row < 7 || row > 10) {
-					OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + row);
+					OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + row + "\n");
 					validInput = false;
 				} else
 					validInput = true;
@@ -74,7 +74,7 @@ public class Menu {
 						second = "KI";
 						validInput = true;
 					} else {
-						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + starter);
+						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + starter + "\n");
 						validInput = false;
 					}
 				} while (!validInput);
@@ -96,7 +96,7 @@ public class Menu {
 						validInput = true;
 					} else {
 						validInput = false;
-						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + difficulty);
+						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + difficulty + "\n");
 					}
 				} while (!validInput);
 				engine = new GameEngine(row, col, mode, difficulty, first);// TODO
@@ -138,7 +138,7 @@ public class Menu {
 					validInput = engine.isVaildMove(move);
 					if (!validInput && !(mode == COMPUTER && ((starter == COMPUTER && counter % 2 != 0)
 							|| (starter == PLAYER && counter % 2 == 0)))) {
-						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + move);
+						OutputCollection.outputWithNewLine("Ungueltige Eingabe: " + move + "\n");
 					}
 
 				} while (!validInput && !(mode == COMPUTER
