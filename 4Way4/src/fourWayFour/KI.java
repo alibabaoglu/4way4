@@ -13,7 +13,7 @@ public class KI {
 	private GameBoard board;
 	private String computersMove;
 	private String kiToken, playerToken;
-	private int difficulty;
+	private int difficulty,rounds;
 
 	public KI(int schwierigkeit, GameBoard gb, String kiToken) {
 		this.kiToken = kiToken;
@@ -121,10 +121,16 @@ public class KI {
 	 * @return
 	 */
 	private String hardMove() {
-
+		rounds++;
+		if(rounds==1) {
+		return easyMove();
+		}
+		else {
 		minimax(this.board.cloneBoard(), 2, 1);
 		return this.computersMove;
+		}
 	}
+	
 
 //------------------------------------------------------------------------------------------
 	/**
