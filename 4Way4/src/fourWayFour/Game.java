@@ -33,29 +33,26 @@ public class Game {
 	public void setStone(String symbol, String entry) {
 		boolean occupied = false;
 
-		
+		if (this.isValid(entry) == true) {
 
-			if (this.isValid(entry) == true) {
+			this.turn++;
+			this.lastTurn = entry;
 
-				this.turn++;
-				this.lastTurn = entry;
+			int x = this.gb.height - (this.number + 1);
+			int y = this.character - 96;
 
-				int x = this.gb.height - (this.number + 1);
-				int y = this.character - 96;
-
-				if (this.gb.board[x][y] == " ") {
-					this.gb.board[x][y] = symbol;
-				} else {
-					occupied = true;
-				}
-				this.shiftGameBoard(symbol, x, y, occupied);
-
-//				System.out.println(this.scoreBoard(this.gb, 1));
-
+			if (this.gb.board[x][y] == " ") {
+				this.gb.board[x][y] = symbol;
 			} else {
-				System.out.println("Ungültiger Zug " + entry);
+				occupied = true;
 			}
-		
+			this.shiftGameBoard(symbol, x, y, occupied);
+
+			System.out.println(this.scoreBoard(this.gb, "X"));
+
+		} else {
+			System.out.println("Ungültiger Zug " + entry);
+		}
 
 	}
 
@@ -249,17 +246,17 @@ public class Game {
 		if (moveEntry.length() > 3 || moveEntry.length() < 2) {
 
 			// Laenge des Strings x=4
-			if (moveEntry.length() == 4) {
+			if ((this.gb.height - 2) == 10 && moveEntry.length() == 4) {
 
 				// x="10a"rich oder x="10"buch(letzter Buchstabe)rich
-				if ((moveEntry.charAt(0) == '1') && (moveEntry.charAt(1) == '0')
-						&& ((moveEntry.charAt(2) == 'a') || (moveEntry.charAt(2) == (char) ('a' + gb.width - 3)))) {
+				if ((moveEntry.charAt(0) == '1') && (moveEntry.charAt(1) == '0') && ((moveEntry.charAt(2) == 'a')
+						|| (moveEntry.charAt(2) == (char) ('a' + this.gb.width - 3)))) {
 					this.number = 10;
 					this.character = moveEntry.charAt(2);
 				}
 				// x="a10"rich oder x=buch(letzter Buchstabe)"10"rich
-				else if ((moveEntry.charAt(1) == '1') && (moveEntry.charAt(2) == '0')
-						&& ((moveEntry.charAt(0) == 'a') || (moveEntry.charAt(0) == (char) ('a' + gb.width - 3)))) {
+				else if ((moveEntry.charAt(1) == '1') && (moveEntry.charAt(2) == '0') && ((moveEntry.charAt(0) == 'a')
+						|| (moveEntry.charAt(0) == (char) ('a' + this.gb.width - 3)))) {
 					this.number = 10;
 					this.character = moveEntry.charAt(0);
 				}
@@ -270,7 +267,7 @@ public class Game {
 				// rich=d oder x="10ar", "a10r" oder x="10"buch(letzter Buchstabe)"l" ,
 				// buch(letzter Buchstabe)"10l"
 				if (moveEntry.charAt(3) == 'd'
-						|| moveEntry.charAt(3) == 'l' && this.character == (char) ('a' + gb.width - 3)
+						|| moveEntry.charAt(3) == 'l' && this.character == (char) ('a' + this.gb.width - 3)
 						|| moveEntry.charAt(3) == 'r' && this.character == 'a') {
 					this.direction = moveEntry.charAt(3);
 					return true;
@@ -290,13 +287,26 @@ public class Game {
 			// x=3
 			if (moveEntry.length() == 3) {
 
+				//
+				if ((this.gb.height - 2) == 10 && moveEntry.charAt(0) == '1' && moveEntry.charAt(1) == 0
+						&& moveEntry.charAt(2) > 'a' && moveEntry.charAt(2) < ('a' + this.gb.width - 3)) {
+					this.number = 10;
+					this.character = moveEntry.charAt(2);
+					this.direction = 'd';
+					return true;
+				}
+				//
+				if ((this.gb.height - 2) == 10 && moveEntry.charAt(1) == '1' && moveEntry.charAt(2) == 0
+						&& moveEntry.charAt(0) > 'a' && moveEntry.charAt(0) < ('a' + this.gb.width - 3)) {
+					return true;
+				}
 				// x = "1"buch rich oder num(letzte Nummer) buch rich
-				if (moveEntry.charAt(0) == '1' || moveEntry.charAt(0) == (char) ('1' + gb.height - 3)) {
+				if (moveEntry.charAt(0) == '1' || moveEntry.charAt(0) == (char) ('1' + this.gb.height - 3)) {
 					this.number = Integer.parseInt(("" + moveEntry.charAt(0)));
 					this.character = moveEntry.charAt(1);
 				}
 				// x = buch"1"rich oder buch num(letzte Nummer) rich
-				else if (moveEntry.charAt(1) == '1' || moveEntry.charAt(1) == (char) ('1' + gb.height - 3)) {
+				else if (moveEntry.charAt(1) == '1' || moveEntry.charAt(1) == (char) ('1' + this.gb.height - 3)) {
 					this.number = Integer.parseInt(("" + moveEntry.charAt(1)));
 					this.character = moveEntry.charAt(0);
 				}
@@ -313,17 +323,17 @@ public class Game {
 				}
 				// x = String mit dem letzter Buchstaben und "1" und entweder "u" oder "l"
 				else if ((this.direction == 'u' || this.direction == 'l') && this.number == 1
-						&& this.character == (char) ('a' + gb.width - 3)) {
+						&& this.character == (char) ('a' + this.gb.width - 3)) {
 					return true;
 				}
 				// x = String mit dem letzter Buchstaben und der letzten Zahl und entweder "l"
 				// oder "d"
-				else if ((this.direction == 'l' || this.direction == 'd') && this.number == (1 + gb.height - 3)
-						&& this.character == (char) ('a' + gb.width - 3)) {
+				else if ((this.direction == 'l' || this.direction == 'd') && this.number == (1 + this.gb.height - 3)
+						&& this.character == (char) ('a' + this.gb.width - 3)) {
 					return true;
 				}
 				// x = String mit "a" und der letzten Zahl und entweder "d" oder "r"
-				else if ((this.direction == 'd' || this.direction == 'r') && this.number == (1 + gb.height - 3)
+				else if ((this.direction == 'd' || this.direction == 'r') && this.number == (1 + this.gb.height - 3)
 						&& this.character == 'a') {
 					return true;
 				}
@@ -336,15 +346,15 @@ public class Game {
 			else {
 
 				// x = num buch
-				if ((moveEntry.charAt(0) >= '1' && moveEntry.charAt(0) <= (char) ('1' + gb.height - 3))
-						&& (moveEntry.charAt(1) >= 'a' && moveEntry.charAt(1) <= (char) ('a' + gb.width - 3))) {
+				if ((moveEntry.charAt(0) >= '1' && moveEntry.charAt(0) <= (char) ('1' + this.gb.height - 3))
+						&& (moveEntry.charAt(1) >= 'a' && moveEntry.charAt(1) <= (char) ('a' + this.gb.width - 3))) {
 
 					this.number = Integer.parseInt(("" + moveEntry.charAt(0)));
 					this.character = moveEntry.charAt(1);
 				}
 				// x = buch num
-				else if ((moveEntry.charAt(1) >= '1' && moveEntry.charAt(1) <= (char) ('1' + gb.height - 3))
-						&& (moveEntry.charAt(0) >= 'a' && moveEntry.charAt(0) <= (char) ('a' + gb.width - 3))) {
+				else if ((moveEntry.charAt(1) >= '1' && moveEntry.charAt(1) <= (char) ('1' + this.gb.height - 3))
+						&& (moveEntry.charAt(0) >= 'a' && moveEntry.charAt(0) <= (char) ('a' + this.gb.width - 3))) {
 
 					this.number = Integer.parseInt(("" + moveEntry.charAt(1)));
 					this.character = moveEntry.charAt(0);
@@ -354,24 +364,24 @@ public class Game {
 					return false;
 				}
 				// x = String mit "1" und NICHT "a" oder dem letzten Buchstaben
-				if (this.number == 1 && this.character != 'a' && this.character != (char) ('a' + gb.width - 3)) {
+				if (this.number == 1 && this.character != 'a' && this.character != (char) ('a' + this.gb.width - 3)) {
 					this.direction = 'u';
 					return true;
 				}
 				// x = String mit der letzten Zahl und NICHT "a" oder dem letzten Buchstaben
-				else if (this.number == (1 + gb.height - 3) && this.character != 'a'
-						&& this.character != (char) ('a' + gb.width - 3)) {
+				else if (this.number == (1 + this.gb.height - 3) && this.character != 'a'
+						&& this.character != (char) ('a' + this.gb.width - 3)) {
 					this.direction = 'd';
 					return true;
 				}
 				// x = String mit "a" und NICHT "1" oder der letzten Zahl
-				else if (this.character == 'a' && this.number != 1 && this.number != (1 + gb.height - 3)) {
+				else if (this.character == 'a' && this.number != 1 && this.number != (1 + this.gb.height - 3)) {
 					this.direction = 'r';
 					return true;
 				}
 				// x = String mit dem letzten Buchstaben und NICHT "1" oder der letzten Zahl
-				else if (this.character == (char) ('a' + gb.width - 3) && this.number != 1
-						&& this.number != (1 + gb.height - 3)) {
+				else if (this.character == (char) ('a' + this.gb.width - 3) && this.number != 1
+						&& this.number != (1 + this.gb.height - 3)) {
 					this.direction = 'l';
 					return true;
 				}
@@ -390,32 +400,32 @@ public class Game {
 	 * @return ist gueltiger Platz?
 	 */
 	private boolean isValidSpace() {
-		int x = gb.height - (this.number + 1);
+		int x = this.gb.height - (this.number + 1);
 		int y = this.character - 96;
 
 		// bei Richtung hoch bzw. runter die gesamte Spalte testen, ob es noch einen
 		// freien Platz gibt
 		if (this.direction == 'u') {
-			for (int columnI = (gb.height - 2); columnI >= 1; columnI--) {
+			for (int columnI = (this.gb.height - 2); columnI >= 1; columnI--) {
 				if (gb.board[columnI][y] == " ")
 					return true;
 			}
 		} else if (this.direction == 'd') {
-			for (int columnII = x; columnII <= (gb.height - 2); columnII++) {
-				if (gb.board[columnII][y] == " ")
+			for (int columnII = x; columnII <= (this.gb.height - 2); columnII++) {
+				if (this.gb.board[columnII][y] == " ")
 					return true;
 			}
 		}
 		// bei Richtung links bzw. rechts die gesamte Zeile testen, ob es noch einen
 		// freien Platz gibt
 		else if (this.direction == 'l') {
-			for (int lineI = (gb.width - 2); lineI >= 1; lineI--) {
-				if (gb.board[x][lineI] == " ")
+			for (int lineI = (this.gb.width - 2); lineI >= 1; lineI--) {
+				if (this.gb.board[x][lineI] == " ")
 					return true;
 			}
 		} else if (this.direction == 'r') {
-			for (int lineII = y; lineII <= (gb.width - 2); lineII++) {
-				if (gb.board[x][lineII] == " ")
+			for (int lineII = y; lineII <= (this.gb.width - 2); lineII++) {
+				if (this.gb.board[x][lineII] == " ")
 					return true;
 			}
 		}
@@ -553,7 +563,7 @@ public class Game {
 		}
 		// Wenn keiner der beiden Spieler eine 4er-Kette haben gewinnt der Letzte der
 		// ziehen konnte
-		else if (player1 == false && player2 == false && this.turn == (gb.height * gb.width)) {
+		else if (player1 == false && player2 == false && this.turn == (this.gb.height * this.gb.width)) {
 			if (this.turn % 2 == 0) {
 				this.winner = false;
 			} else {
@@ -602,46 +612,57 @@ public class Game {
 		column = 1;
 		while (column < this.gb.height - 1) {
 
-			
+			int freeSpaces = 0;
+
+			// Anzahl der freien Plaetze in der Zeile
+			for (int lineSpace = 1; lineSpace < this.gb.width - 1; lineSpace++) {
+				if (this.gb.board[column][lineSpace].equals(" ")) {
+					freeSpaces++;
+				}
+			}
 			line = 1;
 
 			while (line < this.gb.width - 1) {
 
 				// KI
 				// "...XXX(!O)"||"(!X&&!O)XXX..."
-				if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column][line + 1].equals(kiToken)
+				if (freeSpaces >= 1 && (this.gb.board[column][line].equals(kiToken)
+						&& this.gb.board[column][line + 1].equals(kiToken)
 						&& this.gb.board[column][line + 2].equals(kiToken)
 						&& (!this.gb.board[column][line + 3].equals(playerToken)
 								|| !this.gb.board[column][line - 1].equals(playerToken)
-										&& !this.gb.board[column][line - 1].equals(kiToken))) {
+										&& !this.gb.board[column][line - 1].equals(kiToken)))) {
 					line += 2;
 					score += 5;
 				}
 				// "...XX "||"(!X&&!O)XX..."
-				else if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column][line + 1].equals(kiToken)
-						&& (this.gb.board[column][line + 2].equals(" ")
+				else if (freeSpaces >= 1 && (this.gb.board[column][line].equals(kiToken)
+						&& this.gb.board[column][line + 1].equals(kiToken)
+						&& (!this.gb.board[column][line + 2].equals(kiToken)
+								&& !this.gb.board[column][line + 2].equals(playerToken)
 								|| !this.gb.board[column][line - 1].equals(playerToken)
-										&& !this.gb.board[column][line - 1].equals(kiToken))) {
+										&& !this.gb.board[column][line - 1].equals(kiToken)))) {
 					line += 1;
 					score += 2;
 				}
 				// Gegner
 				// "...OOO(!X)"||"(!X&&!O)OOO..."
-				if (this.gb.board[column][line].equals(playerToken)
+				if (freeSpaces >= 1 && (this.gb.board[column][line].equals(playerToken)
 						&& this.gb.board[column][line + 1].equals(playerToken)
 						&& this.gb.board[column][line + 2].equals(playerToken)
 						&& (!this.gb.board[column][line + 3].equals(kiToken)
 								|| !this.gb.board[column][line - 1].equals(kiToken)
-										&& !this.gb.board[column][line - 1].equals(playerToken))) {
+										&& !this.gb.board[column][line - 1].equals(playerToken)))) {
 					line += 2;
 					score -= 100;
 				}
 				// "...OO "||"(!X&&!O)OO..."
-				else if (this.gb.board[column][line].equals(playerToken)
+				else if (freeSpaces >= 1 && (this.gb.board[column][line].equals(playerToken)
 						&& this.gb.board[column][line + 1].equals(playerToken)
-						&& (this.gb.board[column][line + 2].equals(" ")
+						&& (!this.gb.board[column][line + 2].equals(kiToken)
+								&& !this.gb.board[column][line + 2].equals(playerToken)
 								|| !this.gb.board[column][line - 1].equals(kiToken)
-										&& !this.gb.board[column][line - 1].equals(playerToken))) {
+										&& !this.gb.board[column][line - 1].equals(playerToken)))) {
 					line += 1;
 					score -= 1;
 				}
@@ -656,30 +677,39 @@ public class Game {
 		while (line < this.gb.width - 1)
 
 		{
+			int freeSpaces = 0;
+			for (int columnSpace = 1; columnSpace < this.gb.height - 1; columnSpace++) {
+				if (this.gb.board[columnSpace][line].equals(" ")) {
+					freeSpaces++;
+				}
+			}
 			column = 1;
 			while (column < this.gb.height - 1) {
 
 				// KI
-				//   ... ||"(!X&&!O)"
-				//   "X" || "X"
-				//   "X" || "X"
-				//   "X" || "X"
+				// ... ||"(!X&&!O)"
+				// "X" || "X"
+				// "X" || "X"
+				// "X" || "X"
 				// "(!O)"|| ...
-				if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column + 1][line].equals(kiToken)
+				if (freeSpaces >= 1 && (this.gb.board[column][line].equals(kiToken)
+						&& this.gb.board[column + 1][line].equals(kiToken)
 						&& this.gb.board[column + 2][line].equals(kiToken)
 						&& (!this.gb.board[column + 3][line].equals(playerToken)
 								|| !this.gb.board[column - 1][line].equals(playerToken)
-										&& !this.gb.board[column - 1][line].equals(kiToken))) {
+										&& !this.gb.board[column - 1][line].equals(kiToken)))) {
 					column += 2;
 					score += 5;
 				}
 				// ""||""
 				// ""||""
 				// ""||""
-				else if (this.gb.board[column][line].equals(kiToken) && this.gb.board[column + 1][line].equals(kiToken)
-						&& (this.gb.board[column + 2][line].equals(" ")
+				else if (freeSpaces >= 1 && (this.gb.board[column][line].equals(kiToken)
+						&& this.gb.board[column + 1][line].equals(kiToken)
+						&& (!this.gb.board[column + 2][line].equals(kiToken)
+								&& !this.gb.board[column + 2][line].equals(playerToken)
 								|| !this.gb.board[column - 1][line].equals(playerToken)
-										&& !this.gb.board[column - 1][line].equals(kiToken))) {
+										&& !this.gb.board[column - 1][line].equals(kiToken)))) {
 					column += 1;
 					score += 2;
 				}
@@ -688,23 +718,24 @@ public class Game {
 				// ""||""
 				// ""||""
 				// ""||""
-				if (this.gb.board[column][line].equals(playerToken)
+				if (freeSpaces >= 1 && (this.gb.board[column][line].equals(playerToken)
 						&& this.gb.board[column + 1][line].equals(playerToken)
 						&& this.gb.board[column + 2][line].equals(playerToken)
 						&& (!this.gb.board[column + 3][line].equals(kiToken)
 								|| !this.gb.board[column - 1][line].equals(kiToken)
-										&& !this.gb.board[column - 1][line].equals(playerToken))) {
+										&& !this.gb.board[column - 1][line].equals(playerToken)))) {
 					column += 2;
 					score -= 100;
 				}
 				// ""||""
 				// ""||""
 				// ""||""
-				else if (this.gb.board[column][line].equals(playerToken)
+				else if (freeSpaces >= 1 && (this.gb.board[column][line].equals(playerToken)
 						&& this.gb.board[column + 1][line].equals(playerToken)
-						&& (this.gb.board[column + 2][line].equals(" ")
+						&& (!this.gb.board[column + 2][line].equals(kiToken)
+								&& !this.gb.board[column + 2][line].equals(playerToken)
 								|| !this.gb.board[column - 1][line].equals(kiToken)
-										&& !this.gb.board[column - 1][line].equals(playerToken))) {
+										&& !this.gb.board[column - 1][line].equals(playerToken)))) {
 					column += 1;
 					score -= 1;
 				}
