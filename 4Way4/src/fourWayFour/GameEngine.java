@@ -126,6 +126,7 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public void printBoard() {
+		System.out.println("Board von"+ beginner);
 		this.gb.printBoard();
 	}
 
