@@ -1,4 +1,4 @@
-package fourWayFour;
+package ki2;
 
 /**
  * Fehler wegen falscher Eingabe beim Spiel

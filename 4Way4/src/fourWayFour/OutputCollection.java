@@ -1,4 +1,4 @@
-package fourWayFour;
+package ki2;
 
 /**
  * Sammlung der Konsolen-Ausgaben

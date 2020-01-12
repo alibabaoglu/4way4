@@ -1,4 +1,4 @@
-package fourWayFour;
+package ki2;
 
 /**
  * Das gesamte Spiel
