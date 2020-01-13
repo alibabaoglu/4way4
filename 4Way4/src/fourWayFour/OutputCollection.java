@@ -1,4 +1,4 @@
-package ki2;
+package fourTheWin;
 
 /**
  * Sammlung der Konsolen-Ausgaben
