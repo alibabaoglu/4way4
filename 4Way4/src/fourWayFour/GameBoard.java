@@ -1,4 +1,4 @@
-package ki2;
+package fourTheWin;
 
 /**
  * Spielbrett von 4 Way 4
