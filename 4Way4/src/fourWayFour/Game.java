@@ -100,6 +100,7 @@ public class Game {
 	 * 
 	 * @return Anzahl der Iterationen
 	 */
+	// TODO:M
 	private int range() {
 		if (direction == 'u' || direction == 'd') {
 			return this.gb.board[0].length - 2;
@@ -113,8 +114,8 @@ public class Game {
 	 * Koordinaten
 	 * 
 	 * @param symbol   (X/O)
-	 * @param x-Wert
-	 * @param y-Wert
+	 * @param          x-Wert
+	 * @param          y-Wert
 	 * @param occupied
 	 */
 
@@ -190,7 +191,7 @@ public class Game {
 					newStone = this.gb.board[z][i];
 					this.gb.board[z][i] = " ";
 					if (direction == 'r') {
-						while (j < this.gb.board.length)
+						while (j < this.gb.board[0].length - 1)
 							if (this.gb.board[z][j + 1] == " ")
 								j++;
 							else
