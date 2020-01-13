@@ -1,4 +1,4 @@
-package ki2;
+package fourTheWin;
 
 import java.util.List;
 
