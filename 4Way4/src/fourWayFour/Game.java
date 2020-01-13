@@ -100,7 +100,6 @@ public class Game {
 	 * 
 	 * @return Anzahl der Iterationen
 	 */
-	// TODO:M
 	private int range() {
 		if (direction == 'u' || direction == 'd') {
 			return this.gb.board[0].length - 2;
@@ -296,6 +295,9 @@ public class Game {
 				//
 				if ((this.gb.height - 2) == 10 && moveEntry.charAt(1) == '1' && moveEntry.charAt(2) == 0
 						&& moveEntry.charAt(0) > 'a' && moveEntry.charAt(0) < ('a' + this.gb.width - 3)) {
+					this.number = 10;
+					this.character = moveEntry.charAt(0);
+					this.direction = 'd';
 					return true;
 				}
 				// x = "1"buch rich oder num(letzte Nummer) buch rich
