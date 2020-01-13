@@ -1,11 +1,9 @@
-package ki2;
+package fourTheWin;
 
 /**
  * Anforderungen der "Staatssekretäre"
  */
 public interface Requirements {
-
-	public void myMove(String input);
 
 	public String yourMove();
 
@@ -13,7 +11,11 @@ public interface Requirements {
 
 	public boolean whoWon();
 
+	public boolean isVaildMove(String input);
+
 	public void printBoard();
 
-	public boolean isVaildMove(String input);
+//	public void setStart(boolean starter);
+
+	public void myMove(String input);
 }
