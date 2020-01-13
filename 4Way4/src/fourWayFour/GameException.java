@@ -1,4 +1,4 @@
-package ki2;
+package fourTheWin;
 
 /**
  * Fehler wegen falscher Eingabe beim Spiel
