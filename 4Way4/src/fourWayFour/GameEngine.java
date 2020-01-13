@@ -1,4 +1,4 @@
-package ki2;
+package fourTheWin;
 
 /**
  * Das gesamte Spiel
@@ -126,7 +126,6 @@ public class GameEngine implements Requirements {
 	 */
 	@Override
 	public void printBoard() {
-		System.out.println("Board von"+ beginner);
 		this.gb.printBoard();
 	}
 
@@ -141,4 +140,18 @@ public class GameEngine implements Requirements {
 	public boolean isVaildMove(String input) {
 		return this.game.isValid(input) == true;
 	}
+
+//	/**
+//	 * Legt fest wer anfaengt
+//	 * 
+//	 * @param starter true, wenn die KI beginnt, ansonsten false
+//	 */
+//	@Override
+//	public void setStart(boolean starter) {// - true, wenn das jeweilige Programm beginnt, ansonsten false
+//		if (starter) {
+//			this.mode = COMPUTER;
+//		} else {
+//			this.mode = PLAYER;
+//		}
+//	}
 }
