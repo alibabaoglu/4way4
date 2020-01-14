@@ -136,6 +136,7 @@ public class Menu {
 //			// Der Spielablauf
 			OutputCollection.outputWithNewLine("Spielfeld:");
 			engine.printBoard();
+			sc.nextLine();
 			while (engine.isRunning()) {
 				counter++;
 
@@ -153,12 +154,12 @@ public class Menu {
 							move = "";
 						} else {
 							OutputCollection.outputWithNewLine("Zugeingabe:");
-							move = sc.next();
+							move = sc.nextLine();
 						}
 					}
 					if (mode == PLAYER) {
 						OutputCollection.outputWithNewLine("Zugeingabe:");
-						move = sc.next();
+						move = sc.nextLine();
 					}
 					validInput = engine.isVaildMove(move);
 					if (!validInput && !(mode == COMPUTER && ((starter == COMPUTER && counter % 2 != 0)
