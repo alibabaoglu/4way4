@@ -285,7 +285,7 @@ public class Game {
 			if (moveEntry.length() == 3) {
 
 				//
-				if ((this.gb.height - 2) == 10 && moveEntry.charAt(0) == '1' && moveEntry.charAt(1) == 0
+				if ((this.gb.height - 2) == 10 && moveEntry.charAt(0) == '1' && moveEntry.charAt(1) == '0'
 						&& moveEntry.charAt(2) > 'a' && moveEntry.charAt(2) < ('a' + this.gb.width - 3)) {
 					this.number = 10;
 					this.character = moveEntry.charAt(2);
@@ -293,7 +293,7 @@ public class Game {
 					return true;
 				}
 				//
-				if ((this.gb.height - 2) == 10 && moveEntry.charAt(1) == '1' && moveEntry.charAt(2) == 0
+				if ((this.gb.height - 2) == 10 && moveEntry.charAt(1) == '1' && moveEntry.charAt(2) == '0'
 						&& moveEntry.charAt(0) > 'a' && moveEntry.charAt(0) < ('a' + this.gb.width - 3)) {
 					this.number = 10;
 					this.character = moveEntry.charAt(0);
